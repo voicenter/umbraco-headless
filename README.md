@@ -1,8 +1,19 @@
 "# umbraco-headless" 
-``
+This Project have three part which needed to do full integration between Umbraco and Nuxt .
+1.  MsSql (2016+) T-SQL Json  Functions that give us the Umbraco  Object as very nice json objects
+2.  Node.Js server side Library that work in-front of MsSql server to receive Umbraco Data
+3. Nuxt Plugin  in that Push the $LoadNuxtUmbracoData that give you the ability to load the data from the Vuex into the page  
+      
+       async asyncData (context) {
+          return context.app.$LoadNuxtUmbracoData(context)
+        }
+
+  
+Webserver implantation example : 
+
 
     
-    const UmbracoLib = require('./index.js');
+    const UmbracoLib = require('umbraco-headless');
     const config = {
         user: 'sa',
         password: 'weLoveUmbraco',       
