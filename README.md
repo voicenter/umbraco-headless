@@ -63,7 +63,8 @@ To install in Nuxt Project Need to do the following steps :
         ...
         
        router: {
-          UmbracoData.urlList.forEach(function (url) {
+          extendRoutes (routes, resolve) {
+           UmbracoData.urlList.forEach(function (url) {
              console.log("urlList",url)
              routes.push({
                name: url.nodeID,
@@ -87,14 +88,19 @@ To install in Nuxt Project Need to do the following steps :
      plugins: [
         '~/plugins/NuxtUmbraco.js'
       ],
-and add the asyncData in each Template in the pages folder :
 
-      
-       async asyncData (context) {
-          return context.app.$LoadNuxtUmbracoData(context)
-        }
+6 . Add store/Umbraco.js
+    
+    import data from "~/static/UmbracoData.json"
+    export const state = () => (data)
 
+7.  add the asyncData in each Template in the pages folder  Make sure you have all necessary pages :
   
+        
+         async asyncData (context) {
+            return context.app.$LoadNuxtUmbracoData(context)
+          }
 
-6 . Buy Shlomi Beer 
+
+7 . Buy Shlomi Beer 
     
