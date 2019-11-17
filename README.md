@@ -87,8 +87,14 @@ To install in Nuxt Project Need to do the following steps :
      plugins: [
         '~/plugins/NuxtUmbraco.js'
       ],
+and add the asyncData in each Template in the pages folder :
 
+      
+       async asyncData (context) {
+          return context.app.$LoadNuxtUmbracoData(context)
+        }
 
-
+  
 
 6 . Buy Shlomi Beer 
+    
