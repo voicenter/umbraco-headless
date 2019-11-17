@@ -50,3 +50,45 @@ Webserver implantation example :
             }
             
             Connect();
+
+
+
+To install in Nuxt Project Need to do the following steps :
+
+1.copy node_modules\umbraco-headless\LoadUmbracoData.js .
+2.notepad\nano\vi  LoadUmbracoData.js (change Mssql password)
+3.Load Routes in Nuxt nuxt.config.js :
+
+       const UmbracoData = require("./static/UmbracoData.json")
+        ...
+        
+       router: {
+          UmbracoData.urlList.forEach(function (url) {
+             console.log("urlList",url)
+             routes.push({
+               name: url.nodeID,
+               path: url.url,
+               component: resolve(__dirname, 'pages/'+url.TemplateAlias+'.vue'),
+               meta:url
+             })
+           })
+        }
+      },
+      ....
+  
+ 4.Create plugins/NuxtUmbraco.js
+
+     const UmbracoNuxt = require('umbraco-headless/UmbracoNuxt');
+     export default UmbracoNuxt ;
+ 
+    
+5.Add  nuxt.config.js :
+
+     plugins: [
+        '~/plugins/NuxtUmbraco.js'
+      ],
+
+
+
+
+6 . Buy Shlomi Beer 
