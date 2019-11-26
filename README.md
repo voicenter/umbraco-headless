@@ -65,13 +65,20 @@ To install in Nuxt Project Need to do the following steps :
        router: {
           extendRoutes (routes, resolve) {
            UmbracoData.urlList.forEach(function (url) {
-             console.log("urlList",url)
-             routes.push({
+             const route = {
                name: url.nodeID,
                path: url.url,
-               component: resolve(__dirname, 'pages/'+url.TemplateAlias+'.vue'),
-               meta:url
+               component: resolve(__dirname, 'pages/' + url.TemplateAlias + '.vue'),
+               meta: url
+             }
+     
+             const duplicateIndex = routes.findIndex(function (route) {
+               return route.name === url.TemplateAlias
              })
+     
+             if (duplicateIndex !== -1) { routes.splice(duplicateIndex, 1) }
+     
+             routes.push(route)
            })
         }
       },
@@ -103,4 +110,3 @@ To install in Nuxt Project Need to do the following steps :
 
 
 7 . Buy Shlomi Beer 
-    

@@ -44,7 +44,15 @@ app.UmbracoServerClass= class UmbracoServerClass {
         let UrlList = await  this.GetUrlList()
         UrlList.SiteData = await  this.GetNode(1095)
 
+        let Pages = fs.readdirSync('./pages')
+
         //console.log("__dirname",__dirname)
+
+        UrlList.urlList.forEach(url => {
+            if (!Pages.includes(url.TemplateAlias + '.vue')) {
+                url.TemplateAlias = 'index'
+            }
+        })
 
 
         await fs.writeFileSync(fileName, JSON.stringify(UrlList));
