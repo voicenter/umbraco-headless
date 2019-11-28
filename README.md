@@ -14,6 +14,7 @@ Webserver implantation example :
 
     
     const UmbracoLib = require('umbraco-headless');
+    
     const config = {
         user: 'sa',
         password: 'weLoveUmbraco',       
@@ -22,86 +23,50 @@ Webserver implantation example :
         database: 'UmbracoNuxt',
         options: {
             encrypt: true // Use this if you're on Windows Azure
-            }};
+        }
+    };
+        
     // Load the UmbracoServer object
     const Umbraco = new UmbracoLib.UmbracoServerClass(config);
-      // Require a web  framework and instantiate it
-      const fastify = require('fastify')({ logger: true })
-      // Declare a route
-      fastify.get('/Api/GetNode/', async (request, reply) => {
-          let resualt = await  Umbraco.GetNode(1095)
-          return resualt
-      })
+    // Require a web  framework and instantiate it
+    const fastify = require('fastify')({ logger: true })
+    // Declare a route
+    fastify.get('/Api/GetNode/', async (request, reply) => {
+        let resualt = await  Umbraco.GetNode(1095)
+        return resualt
+    })
     // Run the server!
             
-            const startWebService = async () => {
-                try {
-                    await fastify.listen(3001)
-                    fastify.log.info(`server listening on ${fastify.server.address().port}`)
-                } catch (err) {
-                    fastify.log.error(err)
-                    process.exit(1)
-                }
-            }
-            async function  Connect(){
-                await Umbraco.connect();
-                this.mainNode =await  Umbraco.GetNode(1095)
-                await startWebService()
-            }
-            
-            Connect();
-
-
-
-To install in Nuxt Project Need to do the following steps :
-
-1.copy node_modules\umbraco-headless\LoadUmbracoData.js .
-2.notepad\nano\vi  LoadUmbracoData.js (change Mssql password)
-3.Load Routes in Nuxt nuxt.config.js :
-
-       const UmbracoData = require("./static/UmbracoData.json")
-        ...
-        
-       router: {
-          extendRoutes (routes, resolve) {
-           UmbracoData.urlList.forEach(function (url) {
-             const route = {
-               name: url.nodeID,
-               path: url.url,
-               component: resolve(__dirname, 'pages/' + url.TemplateAlias + '.vue'),
-               meta: url
-             }
-     
-             const duplicateIndex = routes.findIndex(function (route) {
-               return route.name === url.TemplateAlias
-             })
-     
-             if (duplicateIndex !== -1) { routes.splice(duplicateIndex, 1) }
-     
-             routes.push(route)
-           })
+    const startWebService = async () => {
+        try {
+            await fastify.listen(3001)
+            fastify.log.info(`server listening on ${fastify.server.address().port}`)
+        } catch (err) {
+            fastify.log.error(err)
+            process.exit(1)
         }
-      },
-      ....
-  
- 4.Create plugins/NuxtUmbraco.js
-
-     const UmbracoNuxt = require('umbraco-headless/UmbracoNuxt');
-     export default UmbracoNuxt ;
- 
+    }
+    async function  Connect(){
+        await Umbraco.connect();
+        this.mainNode =await  Umbraco.GetNode(1095)
+        await startWebService()
+    }
     
-5.Add  nuxt.config.js :
+    Connect();
 
-     plugins: [
-        '~/plugins/NuxtUmbraco.js'
-      ],
 
-6 . Add store/Umbraco.js
-    
-    import data from "~/static/UmbracoData.json"
-    export const state = () => (data)
 
-7.  add the asyncData in each Template in the pages folder  Make sure you have all necessary pages :
+To install in Nuxt Project you need to do the following steps :
+
+1. Have the UmbracoData.json file in the static folder.
+2. In nuxt.config.js set the `umbraco-headless/plugin` in the modules array:
+
+        modules: [
+            'umbraco-headless/plugin',
+        ]
+
+3. Make sure you have all necessary pages. 
+4. Add the asyncData in each Template in the pages folder:
   
         
          async asyncData (context) {
@@ -109,4 +74,4 @@ To install in Nuxt Project Need to do the following steps :
           }
 
 
-7 . Buy Shlomi Beer 
+5 . Buy Shlomi and Bohdan Beer 
