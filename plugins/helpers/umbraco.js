@@ -15,8 +15,17 @@ export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
 
     let Jpath = route.meta[0].Jpath;// When calling /abc the slug will be "abc"
     let NodeData = state[namespace].SiteData;
+    let pathArray = Jpath.split('.');
+    let finalData = {};
+    let pathString = '';
 
-    return JSONPath(Jpath, NodeData)[0]
+    for (let i = 0; i < pathArray.length; i++) {
+        pathString += i === 0 ? pathArray[i] : '.' + pathArray[i];
+
+        if (pathArray[i] !== 'children') Object.assign(finalData, JSONPath(pathString, NodeData)[0]);
+    }
+
+    return finalData
 };
 
 // function to console log the current value of the Umbraco object
