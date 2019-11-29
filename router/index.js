@@ -21,8 +21,14 @@ const setupRoutes = function (UmbracoData) {
     const files = ${files};
     ${existingFunc ? existingFunc : ''}
     const data = ${UmbracoData}; data.urlList.forEach(function (url) {
-        const componentName = files.includes(url.TemplateAlias + '.vue') ? url.TemplateAlias + '.vue' : 'index.vue' 
-    
+        let componentName = url.TemplateAlias + '.vue';
+
+        if (!files.includes(url.TemplateAlias + '.vue')) {
+          console.warn('The ' + url.TemplateAlias + ' component is not created, redirecting the ' + url.url + ' route to the index.vue component.');
+
+          componentName = 'index.vue';
+        }
+
         const route = {
           name: url.nodeID,
           path: url.url,
