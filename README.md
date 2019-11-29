@@ -54,4 +54,4 @@ Returns the data for your component from Vuex Store
 
 ### `log`
 
-Returns the whole Umbraco Vuex store
+Logs to console the whole Umbraco Vuex store
