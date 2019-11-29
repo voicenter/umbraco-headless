@@ -1,3 +1,5 @@
+const { readdirSync } = require('fs');
+
 const setupRoutes = function (UmbracoData) {
     let existingFunc = this.options.router.extendRoutes ?
         this.options.router.extendRoutes.toString() : null;
@@ -9,13 +11,22 @@ const setupRoutes = function (UmbracoData) {
         );
     }
 
+    const files = JSON.stringify(readdirSync('./plugins'));
+
+    for (let a in files) {
+        if (files.hasOwnProperty(a)) a = `"${a}"`
+    }
+
     const newFunc = `
+    const files = ${files};
     ${existingFunc ? existingFunc : ''}
     const data = ${UmbracoData}; data.urlList.forEach(function (url) {
+        const componentName = files.includes(url.TemplateAlias + '.vue') ? url.TemplateAlias + '.vue' : 'index.vue' 
+    
         const route = {
           name: url.nodeID,
           path: url.url,
-          component: resolve('pages/' + url.TemplateAlias + '.vue'),
+          component: resolve('pages/' + componentName),
           meta: url
         }
 
