@@ -11,7 +11,7 @@ const setupRoutes = function (UmbracoData) {
         );
     }
 
-    const files = JSON.stringify(readdirSync('./plugins'));
+    const files = JSON.stringify(readdirSync(this.options.rootDir + '/pages'));
 
     for (let a in files) {
         if (files.hasOwnProperty(a)) a = `"${a}"`
