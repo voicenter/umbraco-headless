@@ -1,60 +1,53 @@
-const fs = require('fs')
-const sql = require('mssql')
-const app ={}
-module.exports =  app
+const {resolve, join} = require('path');
+const {readdirSync, readFileSync} = require('fs');
+const {setupRoutes} = require('./router');
+
+export default function (moduleOptions) {
+    const options = {...moduleOptions};
+
+    if (!options.namespace) options.namespace = 'Umbraco';
+
+    const {namespace} = options;
+
+    const UmbracoData = readFileSync(this.options.rootDir + '/static/UmbracoData.json', 'utf8');
+
+    options[namespace] = typeof UmbracoData === 'string' ? JSON.parse(UmbracoData) : UmbracoData;
+
+    setupRoutes.call(this, UmbracoData);
+
+    if (!this.options.store) this.options.store = true;
+
+    const pluginsToSync = [
+        'store/index.js',
+        'plugins/index.js'
+    ];
 
 
-
-
-app.UmbracoServerClass= class UmbracoServerClass {
-    constructor(config) {
-        if(!config&& config.constructor.name==="Object") throw new Error('dbCon is Required to the UmbracoServerClass to run ... ');
-        this.config = config;
-        this.connected=false
-        //this.connect()
-    }
-    async connect () {
-        this.connected=true
-        this.pool = await sql.connect(this.config)
-        console.log("Sql Is Concted ?",this.pool)
-
-
-    }
-    async Dispose () {
-        this.connected=false
-        this.pool.close()
-        console.log("Sql Is Colose",this.pool)
-
-
-    }
-    async GetNode (NodeID) {
-        let result1 = await this.pool.request().input('NodeID', sql.Int, NodeID)
-            .query('select * from FN_GetNodeFullData(@NodeID)')
-        return JSON.parse( result1.recordsets[0][0].JsonData)
-
-    }
-    async GetUrlList () {
-        if(!this.connected)await this.connect()
-        let result1 = await this.pool.request().query('SELECT [dbo].[FN_GetUrlList]() as JsonData')
-        return JSON.parse( result1.recordsets[0][0].JsonData)
-
-    }
-    async SaveUmbracoData(fileName){
-        if(!fileName)fileName='./static/UmbracoData.json'
-        let UrlList = await  this.GetUrlList()
-        UrlList.SiteData = await  this.GetNode(1095)
-
-        let Pages = fs.readdirSync('./pages')
-
-        //console.log("__dirname",__dirname)
-
-        UrlList.urlList.forEach(url => {
-            if (!Pages.includes(url.TemplateAlias + '.vue')) {
-                url.TemplateAlias = 'index'
-            }
+    for (const pathString of pluginsToSync) {
+        this.addPlugin({
+            src: resolve(__dirname, pathString),
+            fileName: join(namespace, pathString),
+            options
         })
+    }
 
 
-        await fs.writeFileSync(fileName, JSON.stringify(UrlList));
+    const foldersToSync = [
+        'store/modules',
+        'plugins/helpers'
+    ];
+
+    for (const pathString of foldersToSync) {
+        const path = resolve(__dirname, pathString);
+
+        for (const file of readdirSync(path)) {
+            this.addTemplate({
+                src: resolve(path, file),
+                fileName: join(namespace, pathString, file),
+                options
+            })
+        }
     }
 }
+
+module.exports.meta = require('./package.json');
