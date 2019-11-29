@@ -1,8 +1,8 @@
-# custom-umbraco-headless
+# umbraco-headless
 The plugin that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
 # Installing:
-1. Install dependency by running `yarn add https://github.com/Regani/custom-umbraco-headless.git`
+1. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
 2. Configure your nuxt project by adding the following:
 
 ```
