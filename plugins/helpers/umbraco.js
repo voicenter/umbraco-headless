@@ -9,7 +9,16 @@ const storeModuleExists = (state, namespace) => {
     }
 };
 
-// function to return the current value of the Umbraco object
+/**
+ * Function to return the current value of the Umbraco object relative to the current path
+ * and merge it with the values moving to the most parent path
+ *
+ * @param state
+ * @param route
+ * @param namespace
+ * @returns {object}
+ * @constructor
+ */
 export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
     if (!storeModuleExists(state, namespace)) return undefined;
 
