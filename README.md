@@ -12,7 +12,7 @@ Nuxt module that helps you to easily load your Umbraco data directly into your g
 {
     modules: [
         // ...
-        'custom-umbraco-headless'
+        'umbraco-headless'
     ]
 }
 ```
@@ -23,7 +23,7 @@ Also you can provide the name for the plugin and store by passing the options ob
 {
     modules: [
         // ...
-        ['custom-umbraco-headless', { namespace: 'MyUmbracoNuxt' }]
+        ['umbraco-headless', { namespace: 'MyUmbracoNuxt' }]
     ]
 }
 ```
