@@ -1,7 +1,5 @@
-<h1 align="center">umbraco-headless</h1>
-<p align="center">
+##umbraco-headless
 Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
-</p>
 
 ## Setup:
 1. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
