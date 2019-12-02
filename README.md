@@ -1,4 +1,4 @@
-##umbraco-headless
+## umbraco-headless
 Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
 ## Setup:
