@@ -2,7 +2,7 @@
 Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
 ## Setup:
-1. Update your server with this extension [project](https://github.com/voicenter/umbraco-headless-api)
+1. Update your server with this [extension](https://github.com/voicenter/umbraco-headless-api)
 2. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
 3. Configure your nuxt project by adding the following:
 
