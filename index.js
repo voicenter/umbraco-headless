@@ -6,7 +6,7 @@ export default function (moduleOptions) {
     // Parse module options to var
     const options = {...moduleOptions};
 
-    // If namespace is parsed - use it if no - use custom naming
+    // If namespace is parsed - use it if no - use default naming
     if (!options.namespace) options.namespace = 'Umbraco';
 
     const {namespace} = options;
