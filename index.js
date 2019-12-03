@@ -17,8 +17,11 @@ export default function (moduleOptions) {
     // Make sure that parsed data is not JSON but js object
     options[namespace] = typeof UmbracoData === 'string' ? JSON.parse(UmbracoData) : UmbracoData;
 
+    // Get the list of urls
+    const urlList = JSON.stringify(options[namespace].urlList);
+
     // Extends the nuxt routes
-    setupRoutes.call(this, UmbracoData);
+    setupRoutes.call(this, urlList);
 
     // If nuxt don't have store - enable it
     if (!this.options.store) this.options.store = true;

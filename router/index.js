@@ -1,6 +1,6 @@
 const {readdirSync} = require('fs');
 
-const setupRoutes = function (UmbracoData) {
+const setupRoutes = function (urlList) {
     // Retrieve already created extendRoutes function in nuxt config
     let existingFunc = this.options.router.extendRoutes ?
         this.options.router.extendRoutes.toString() : null;
@@ -28,8 +28,8 @@ const setupRoutes = function (UmbracoData) {
     // Set the already created function if it is present
     ${existingFunc ? existingFunc : ''}
     // Set the parsed umbracoData to variable
-    const data = ${UmbracoData}; 
-    data.urlList.forEach(function (url) {
+    const urlList = ${urlList}; 
+    urlList.forEach(function (url) {
         // Generate the component name
         let componentName = url.TemplateAlias + '.vue';
 
