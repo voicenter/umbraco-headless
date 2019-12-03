@@ -11,11 +11,8 @@ export default function (moduleOptions) {
 
     const {namespace} = options;
 
-    // Parse the UmbracoData.json data to variable
-    const UmbracoData = readFileSync(this.options.rootDir + '/static/UmbracoData.json', 'utf8');
-
-    // Make sure that parsed data is not JSON but js object
-    options[namespace] = typeof UmbracoData === 'string' ? JSON.parse(UmbracoData) : UmbracoData;
+    // Parse the UmbracoData.json data into options
+    options[namespace] = require(this.options.rootDir + '/static/UmbracoData.json');
 
     // Get the list of urls
     const urlList = JSON.stringify(options[namespace].urlList);
