@@ -1,26 +1,31 @@
-﻿DROP FUNCTION IF EXISTS FN_GetNodeDataOLD
- go
-DROP FUNCTION IF EXISTS FN_GetNodeFullData
- go
-DROP FUNCTION IF EXISTS FN_GetNodeDataNU
- go
-DROP FUNCTION IF EXISTS FN_GetNodeJpath
- go
-DROP FUNCTION IF EXISTS FN_GetNodeData
- go
-DROP FUNCTION IF EXISTS FN_GetMediaURL
- go
-DROP FUNCTION IF EXISTS FN_GetNodeURL
- go
-DROP FUNCTION IF EXISTS FN_GetUrlList
- go
-DROP FUNCTION IF EXISTS FN_GetFuctionSQLScriptNotWorking
- go
-DROP PROCEDURE IF EXISTS LongPrint
- go
-DROP FUNCTION IF EXISTS FN_GetFuctionSQLScript
- go
--- =============================================
+"DROP FUNCTION IF EXISTS FN_GetNodeData
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetNodeFullData
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetNodeDataNU
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetNodeJpath
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetMediaURL
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetNodeURL
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetUrlList
+ go 
+"
+"DROP PROCEDURE IF EXISTS LongPrint
+ go 
+"
+"DROP FUNCTION IF EXISTS FN_GetFuctionSQLScript
+ go 
+"
+"-- =============================================
 -- Author:		Shlomi Gutman
 -- Create date:
 -- Description:
@@ -66,8 +71,10 @@ insert into @Table_Var (NodeID,JsonData)  values (@NodeID, @response)
 	RETURN
 END
 
- go
--- =============================================
+
+ go 
+"
+"-- =============================================
 -- Author:		Shlomi Gutman
 -- Create date:
 -- Description:
@@ -108,8 +115,10 @@ insert into @Table_Var (NodeID,JsonData)  values (@NodeID,JSON_QUERY( JSON_MODIF
 	RETURN
 END
 
- go
--- =============================================
+
+ go 
+"
+"-- =============================================
 -- Author:		Shlomi Gutman
 -- Create date:
 -- Description:
@@ -132,8 +141,10 @@ cast (	[cmsContentNu].data as nvarchar(max)) as  JsonData
 )
 
 
- go
--- =============================================
+
+ go 
+"
+"-- =============================================
 -- Author:		Shlomi Gutman
 -- Create date:
 -- Description:	Get Node Jpath in the full site tree data
@@ -166,70 +177,10 @@ from STRING_SPLIT(@parentsList,',') as IdList
 
 END
 
- go
--- =============================================
--- Author:		Shlomi Gutman
--- Create date:
--- Description:
--- select * from FN_GetNodeData(1104)
--- =============================================
-CREATE  FUNCTION [dbo].[FN_GetNodeData]
-(
-	-- Add the parameters for the function here
-	@NodeID int
-)
-RETURNS
-@Table_Var TABLE
-(
-	-- Add the column definitions for the TABLE variable here
-	NodeID int ,
-	JsonData nVarchar(max)
-)
-AS
-BEGIN
-	-- Fill the table variable with the rows for your result set
 
-Declare  @response   NVARCHAR(MAX)
-set @response =  '{}'--(SELECT NULL AS TEST FOR JSON PATH,ROOT)
-Declare @VersionID int
-
-SELECT TOP (1) @VersionID=  id
-FROM     umbracoContentVersion
-WHERE  ([current] = 1) AND (nodeId = @NodeID)
-ORDER BY id DESC
-
-SELECT @response=     JSON_MODIFY( @response , '$.'+[cmsPropertyType].ALIAS,
-
-
-case
-	when intValue is not null  then cast (intValue as nvarchar(MAX))
-	when decimalValue is not null  then cast (decimalValue as nvarchar(MAX))
-	when dateValue is not null  then cast (dateValue as nvarchar(MAX))
-	when varcharValue is not null  then cast (varcharValue as nvarchar(MAX))
-	when intValue is not null  then cast (intValue as nvarchar(MAX))
-	when textValue is not null  and    left(cast(textValue as  NVARCHAR(MAX)),6)='umb://'   then dbo.FN_GetMediaURL (cast(textValue as varchar(MAX)))
-	when textValue is not null   then cast (textValue as nvarchar(MAX))
-	else 'UnKnown'
-end
-
-
-
-
-
-)
-FROM     umbracoPropertyData inner join [dbo].[cmsPropertyType] ON   umbracoPropertyData.propertyTypeId = [cmsPropertyType].id
-where umbracoPropertyData.versionID=@VersionID
-ORDER BY versionId DESC
-
-select @response = JSON_MODIFY (@response,'$.Name', umbracoNode.text) FROM umbracoNode where id=  @NodeID
-
-insert into @Table_Var (NodeID,JsonData)  values (@NodeID, @response)
-
-	RETURN
-END
-
- go
--- =============================================
+ go 
+"
+"-- =============================================
 -- Author:		nitzan gutman
 -- Create date: 161119
 -- Description:	getting media full path from prefix
@@ -262,8 +213,10 @@ BEGIN
 
 END
 
- go
--- =============================================
+
+ go 
+"
+"-- =============================================
 -- Author:		Shlomi Gutman
 -- Create date:
 -- Description:	Get Node Jpath in the full site tree data
@@ -324,8 +277,10 @@ from STRING_SPLIT(@parentsList,',') as IdList
 
 END
 
- go
--- =============================================
+
+ go 
+"
+"-- =============================================
 -- Author:		nitzan
 -- Create date: 161119
 -- Description:	url list of website
@@ -358,7 +313,13 @@ BEGIN
 		AND umbracoPropertyData.propertyTypeId = @hideUrlPropertyTypeID
 		JOIN umbracoDocumentVersion ON umbracoContentVersion.id = umbracoDocumentVersion.id
 		left JOIN cmsTemplate ON umbracoDocumentVersion.templateId = cmsTemplate.nodeId
-		WHERE  ([current] = 1) 	AND (umbracoPropertyData.intValue <>1 or umbracoPropertyData.intValue is null)
+		WHERE  ([current] = 1) 	AND (umbracoPropertyData.intValue <>1 or umbracoPropertyData.intValue is null) 
+		AND umbracoContentVersion.nodeid NOT IN(
+			SELECT DISTINCT uCV.nodeid
+			FROM umbracoContentVersion uCV
+				INNER JOIN umbracoPropertyData uPD ON uCV.id = uPD.versionid
+				INNER JOIN cmsPropertyType cPT ON cPT.id = uPD.propertyTypeId AND cPT.Alias = 'hidePage'
+			WHERE uCV.[current] = 1 AND (uPD.intValue = 1))
 		ORDER BY umbracoContentVersion.Id DESC
 --		print @urlList
 
@@ -370,44 +331,10 @@ BEGIN
 
 END
 
- go
--- =============================================
--- Author:		Shlomi Gutman
--- Create date:
--- Description:	select dbo.FN_GetFuctionSQLScript()
--- =============================================
-CREATE FUNCTION FN_GetFuctionSQLScript
-(
-	-- Add the parameters for the function here
 
-)
-RETURNS  nvarchar(max)
-AS
-BEGIN
-	-- Declare the return variable here
-	DECLARE @Result nvarchar(max)
-
-	set @Result=''
-	-- Add the T-SQL statements to compute the return value here
-
--- Get the function name, definition, and relevant properties
-SELECT
-   @Result = @Result  +'  -- go --  '+ sm.definition
-
-FROM sys.sql_modules AS sm
-JOIN sys.objects AS o ON sm.object_id = o.object_id
--- from the function 'dbo.ufnGetProductDealerPrice'
---WHERE sm.object_id = OBJECT_ID('dbo.FN_GetNodeData')
-ORDER BY o.type;
-
-
-	-- Return the result of the function
-	RETURN @Result
-
-END
-
- go
-CREATE PROCEDURE [dbo].[LongPrint]
+ go 
+"
+"CREATE PROCEDURE [dbo].[LongPrint]
       @String NVARCHAR(MAX)
 
 AS
@@ -471,38 +398,40 @@ BEGIN
 END /*End While loop*/
 
 
- go
--- =============================================
--- Author:		Shlomi Gutman
--- Create date:
--- Description:
---  select * from FN_GetFuctionSQLScript()
--- =============================================
-CREATE FUNCTION FN_GetFuctionSQLScript
-(
-	-- Add the parameters for the function here
 
+ go 
+"
+"-- =============================================
+-- Author:		Shlomi Gutman
+-- Create date: 
+-- Description:	
+--  select * from dbo.FN_GetFuctionSQLScript()
+-- =============================================
+CREATE FUNCTION dbo.FN_GetFuctionSQLScript 
+(	
+	-- Add the parameters for the function here
+	
 )
-RETURNS TABLE
+RETURNS TABLE 
 AS
-RETURN
+RETURN 
 (
 	SELECT
   cast (
   'DROP '+
-  CASE type
+  CASE type   
      WHEN 'TF' THEN 'FUNCTION'
      WHEN 'FN' THEN 'FUNCTION'
      WHEN 'IF' THEN 'FUNCTION'
      WHEN 'P' THEN 'PROCEDURE'
 	ELSE type collate SQL_Latin1_General_CP1_CI_AS
-
+    
   end
-
-  +' IF EXISTS '+ name  collate SQL_Latin1_General_CP1_CI_AS + CHAR(13) + CHAR(10) +' go ' + CHAR(13) + CHAR(10)
+  
+  +' IF EXISTS '+ name  collate SQL_Latin1_General_CP1_CI_AS + CHAR(13) + CHAR(10) +' go ' + CHAR(13) + CHAR(10) 
    as varchar(4000)) collate SQL_Latin1_General_CP1_CI_AS as Script
-FROM sys.sql_modules AS sm
-JOIN sys.objects AS o ON sm.object_id = o.object_id
+FROM sys.sql_modules AS sm  
+JOIN sys.objects AS o ON sm.object_id = o.object_id  
 
 
 union all
@@ -510,16 +439,16 @@ union all
 
 	-- Add the SELECT statement with parameter references here
 	SELECT
- --  @Result = @Result  +'  -- go --  '+
- cast (sm.definition as varchar(max)) collate SQL_Latin1_General_CP1_CI_AS
+ --  @Result = @Result  +'  -- go --  '+ 
+ cast (sm.definition as varchar(max)) collate SQL_Latin1_General_CP1_CI_AS 
  + CHAR(13) + CHAR(10) +' go ' + CHAR(13) + CHAR(10)  as Script
-
-FROM sys.sql_modules AS sm
-JOIN sys.objects AS o ON sm.object_id = o.object_id
--- from the function 'dbo.ufnGetProductDealerPrice'
---WHERE sm.object_id = OBJECT_ID('dbo.FN_GetNodeData')
-
+  
+FROM sys.sql_modules AS sm  
+JOIN sys.objects AS o ON sm.object_id = o.object_id  
+-- from the function 'dbo.ufnGetProductDealerPrice'  
+--WHERE sm.object_id = OBJECT_ID('dbo.FN_GetNodeData')  
+  
 
 )
-
- go
+ go 
+"
