@@ -1,5 +1,5 @@
 {
-  "name": "custom-umbraco-headless",
+  "name": "umbraco-headless",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/Regani/custom-umbraco-headless.git",
