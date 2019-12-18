@@ -2,8 +2,9 @@
 Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
 ## Setup:
-1. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
-2. Configure your nuxt project by adding the following:
+1. Update your server with this [extension](https://github.com/voicenter/umbraco-headless-api)
+2. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
+3. Configure your nuxt project by adding the following:
 
 ```js
 // nuxt.config.js
@@ -25,8 +26,8 @@ Also you can provide the name for the plugin and store by passing the options ob
     ]
 }
 ```
-3. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
-4. Make sure you have all the created components in your pages folder
+4. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
+5. Make sure you have all the created components in your pages folder
 
 :warning: Be aware that this module will automatically setup the Vuex storage for your Nuxt project. 
 

@@ -1,8 +1,8 @@
 import umbracoModule from './modules/Umbraco';
 
-const options = JSON.parse(`<%= JSON.stringify(options) %>`);
-const {namespace} = options;
+const namespace = <%= JSON.stringify(options.namespace) %>;
+const umbracoData = <%= JSON.stringify(options[options.namespace]) %>;
 
 export default ({store}, inject) => {
-    store.registerModule(namespace, umbracoModule(options, namespace))
+    store.registerModule(namespace, umbracoModule(umbracoData))
 }

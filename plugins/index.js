@@ -1,7 +1,6 @@
 import * as helpers from './helpers/umbraco.js'
 
-const options = JSON.parse(`<%= JSON.stringify(options) %>`);
-const { namespace } = options;
+const namespace = <%= JSON.stringify(options.namespace) %>;
 
 export default ({ store, route }, inject) => {
     const { state } = store;
