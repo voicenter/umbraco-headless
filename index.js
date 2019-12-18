@@ -1,52 +1,57 @@
-const fs = require('fs')
-const sql = require('mssql')
-const app ={}
-module.exports =  app
+const {resolve, join} = require('path');
+const {readdirSync, readFileSync} = require('fs');
+const {setupRoutes} = require('./router');
 
+export default function (moduleOptions) {
+    // Parse module options to var
+    const options = {...moduleOptions};
 
+    // If namespace is parsed - use it if no - use default naming
+    if (!options.namespace) options.namespace = 'Umbraco';
 
+    const {namespace} = options;
 
-app.UmbracoServerClass= class UmbracoServerClass {
-    constructor(config) {
-        if(!config&& config.constructor.name==="Object") throw new Error('dbCon is Required to the UmbracoServerClass to run ... ');
-        this.config = config;
-        this.connected=false
-        //this.connect()
+    // Parse the UmbracoData.json data into options
+    options[namespace] = require(this.options.rootDir + '/static/UmbracoData.json');
+
+    // Get the list of urls
+    const urlList = JSON.stringify(options[namespace].urlList);
+
+    // Extends the nuxt routes
+    setupRoutes.call(this, urlList);
+
+    // If nuxt don't have store - enable it
+    if (!this.options.store) this.options.store = true;
+
+    // Add all of the initial plugins
+    const pluginsToSync = [
+        'store/index.js',
+        'plugins/index.js'
+    ];
+    for (const pathString of pluginsToSync) {
+        this.addPlugin({
+            src: resolve(__dirname, pathString),
+            fileName: join(namespace, pathString),
+            options
+        })
     }
-    async connect () {
-        this.connected=true
-        this.pool = await sql.connect(this.config)
-        console.log("Sql Is Concted ?",this.pool)
 
+    // Sync all of the files and folders to relevant places in the nuxt build dir (.nuxt/)
+    const foldersToSync = [
+        'store/modules',
+        'plugins/helpers'
+    ];
+    for (const pathString of foldersToSync) {
+        const path = resolve(__dirname, pathString);
 
-    }
-    async Dispose () {
-        this.connected=false
-        this.pool.close()
-        console.log("Sql Is Colose",this.pool)
-
-
-    }
-    async GetNode (NodeID) {
-        let result1 = await this.pool.request().input('NodeID', sql.Int, NodeID)
-            .query('select * from FN_GetNodeFullData(@NodeID)')
-        return JSON.parse( result1.recordsets[0][0].JsonData)
-
-    }
-    async GetUrlList () {
-        if(!this.connected)await this.connect()
-        let result1 = await this.pool.request().query('SELECT [dbo].[FN_GetUrlList]() as JsonData')
-        return JSON.parse( result1.recordsets[0][0].JsonData)
-
-    }
-    async SaveUmbracoData(fileName){
-        if(!fileName)fileName='./static/UmbracoData.json'
-        let UrlList = await  this.GetUrlList()
-        UrlList.SiteData = await  this.GetNode(1095)
-
-        //console.log("__dirname",__dirname)
-
-
-        await fs.writeFileSync(fileName, JSON.stringify(UrlList));
+        for (const file of readdirSync(path)) {
+            this.addTemplate({
+                src: resolve(path, file),
+                fileName: join(namespace, pathString, file),
+                options
+            })
+        }
     }
 }
+
+module.exports.meta = require('./package.json');

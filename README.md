@@ -1,106 +1,56 @@
-"# umbraco-headless" 
-This Project have three part which needed to do full integration between Umbraco and Nuxt .
-1.  MsSql (2016+) T-SQL Json  Functions that give us the Umbraco  Object as very nice json objects
-2.  Node.Js server side Library that work in-front of MsSql server to receive Umbraco Data
-3. Nuxt Plugin  in that Push the $LoadNuxtUmbracoData that give you the ability to load the data from the Vuex into the page  
-      
-       async asyncData (context) {
-          return context.app.$LoadNuxtUmbracoData(context)
-        }
+## umbraco-headless
+Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
-  
-Webserver implantation example : 
+## Setup:
+1. Update your server with this [extension](https://github.com/voicenter/umbraco-headless-api)
+2. Install dependency by running `yarn add https://github.com/voicenter/umbraco-headless/`
+3. Configure your nuxt project by adding the following:
 
+```js
+// nuxt.config.js
+{
+    modules: [
+        // ...
+        'umbraco-headless'
+    ]
+}
+```
+Also you can provide the name for the plugin and store by passing the options object on module include (default name is 'Umbraco'):
 
-    
-    const UmbracoLib = require('umbraco-headless');
-    const config = {
-        user: 'sa',
-        password: 'weLoveUmbraco',       
-        
-        server: '192.168.1.1', // You can use 'localhost\\instance' to connect to named instance
-        database: 'UmbracoNuxt',
-        options: {
-            encrypt: true // Use this if you're on Windows Azure
-            }};
-    // Load the UmbracoServer object
-    const Umbraco = new UmbracoLib.UmbracoServerClass(config);
-      // Require a web  framework and instantiate it
-      const fastify = require('fastify')({ logger: true })
-      // Declare a route
-      fastify.get('/Api/GetNode/', async (request, reply) => {
-          let resualt = await  Umbraco.GetNode(1095)
-          return resualt
-      })
-    // Run the server!
-            
-            const startWebService = async () => {
-                try {
-                    await fastify.listen(3001)
-                    fastify.log.info(`server listening on ${fastify.server.address().port}`)
-                } catch (err) {
-                    fastify.log.error(err)
-                    process.exit(1)
-                }
-            }
-            async function  Connect(){
-                await Umbraco.connect();
-                this.mainNode =await  Umbraco.GetNode(1095)
-                await startWebService()
-            }
-            
-            Connect();
+```js
+// nuxt.config.js
+{
+    modules: [
+        // ...
+        ['umbraco-headless', { namespace: 'MyUmbracoNuxt' }]
+    ]
+}
+```
+4. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
+5. Make sure you have all the created components in your pages folder
 
+:warning: Be aware that this module will automatically setup the Vuex storage for your Nuxt project. 
 
+## Usage
+Just add the following to your pages components:
+```js
+asyncData (context) {
+    return context.app.$Umbraco.LoadNuxtUmbracoData(context)
+}
+```
+Or if you provided custom namespace:
+```js
+asyncData (context) {
+    return context.app.$[your_namespace].LoadNuxtUmbracoData(context)
+}
+```
 
-To install in Nuxt Project Need to do the following steps :
+## Available plugin methods
 
-1.copy node_modules\umbraco-headless\LoadUmbracoData.js .
-2.notepad\nano\vi  LoadUmbracoData.js (change Mssql password)
-3.Load Routes in Nuxt nuxt.config.js :
+### `LoadNuxtUmbracoData`
 
-       const UmbracoData = require("./static/UmbracoData.json")
-        ...
-        
-       router: {
-          extendRoutes (routes, resolve) {
-           UmbracoData.urlList.forEach(function (url) {
-             console.log("urlList",url)
-             routes.push({
-               name: url.nodeID,
-               path: url.url,
-               component: resolve(__dirname, 'pages/'+url.TemplateAlias+'.vue'),
-               meta:url
-             })
-           })
-        }
-      },
-      ....
-  
- 4.Create plugins/NuxtUmbraco.js
+Returns the data for your component from Vuex Store
 
-     const UmbracoNuxt = require('umbraco-headless/UmbracoNuxt');
-     export default UmbracoNuxt ;
- 
-    
-5.Add  nuxt.config.js :
+### `log`
 
-     plugins: [
-        '~/plugins/NuxtUmbraco.js'
-      ],
-
-6 . Add store/Umbraco.js
-    
-    import data from "~/static/UmbracoData.json"
-    export const state = () => (data)
-
-7.  add the asyncData in each Template in the pages folder  Make sure you have all necessary pages :
-  
-        
-         async asyncData (context) {
-            return context.app.$LoadNuxtUmbracoData(context)
-          }
-
-
-7 . Buy Shlomi Beer 
-    
+Logs to console the whole Umbraco Vuex store
