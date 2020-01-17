@@ -6,7 +6,7 @@ export default ({ store, route }, inject) => {
     const { state } = store;
 
     inject(namespace, {
-        LoadNuxtUmbracoData() {
+        LoadNuxtUmbracoData({ route }) {
             return helpers.LoadNuxtUmbracoData({ state, route, namespace })
         },
         log() {
