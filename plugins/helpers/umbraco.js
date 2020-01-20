@@ -29,7 +29,6 @@ export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
     let pathString = '';
     let tempPathString = '';
     let urlList = state[namespace].urlList;
-    let tempChildrenUrls = {}
 
     for (let i = 0; i < pathArray.length; i++) {
         pathString += i === 0 ? pathArray[i] : '.' + pathArray[i];
@@ -45,15 +44,10 @@ export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
 
                     for(let j = 0; j < urlList.length; j++) {
                         if(tempPathString === urlList[j].Jpath) {
-                            tempChildrenUrls[key] = urlList[j].url
+                            objData.children[key].url = urlList[j].url
                             break;
                         }
                     }
-                    if(!objData.childrenUrls) {
-                        objData.childrenUrls = {}
-                    }
-                    Object.assign(objData.childrenUrls, tempChildrenUrls)
-                    tempChildrenUrls = {}
                     tempPathString = '';
                 }
             }
