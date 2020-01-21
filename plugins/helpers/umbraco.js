@@ -37,6 +37,20 @@ export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
     return finalData
 };
 
+/**
+ * Function to load the root Umbraco site data
+ *
+ * @param state
+ * @param namespace
+ * @returns {undefined|*}
+ * @constructor
+ */
+export const LoadRootData = ({ state, namespace }) => {
+    if (!storeModuleExists(state, namespace)) return undefined;
+
+    return state[namespace].SiteData;
+};
+
 // function to console log the current value of the Umbraco object
 export const log = (state, namespace) => {
     if (!storeModuleExists(state, namespace)) return undefined;

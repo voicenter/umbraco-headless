@@ -9,6 +9,9 @@ export default ({ store, route }, inject) => {
         LoadNuxtUmbracoData({ route }) {
             return helpers.LoadNuxtUmbracoData({ state, route, namespace })
         },
+        LoadRootData() {
+            return helpers.LoadRootData({ state, namespace })
+        },
         log() {
             return helpers.log({ state, namespace })
         },
