@@ -54,3 +54,7 @@ Returns the data for your component from Vuex Store
 ### `log`
 
 Logs to console the whole Umbraco Vuex store
+
+### `LoadRootData`
+
+Returns the root Umbraco data from Vuex store
