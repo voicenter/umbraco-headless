@@ -26,8 +26,8 @@ Also you can provide the name for the plugin and store by passing the options ob
     ]
 }
 ```
-4. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
-5. Make sure you have all the created components in your pages folder
+4. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. 
+5. Make sure you have all the created components in your pages folder. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
 
 :warning: Be aware that this module will automatically setup the Vuex storage for your Nuxt project. 
 
