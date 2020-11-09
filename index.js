@@ -1,5 +1,5 @@
 const {resolve, join} = require('path');
-const {readdirSync, readFileSync} = require('fs');
+const {readdirSync} = require('fs');
 const {setupRoutes} = require('./router');
 
 export default function (moduleOptions) {
@@ -15,7 +15,7 @@ export default function (moduleOptions) {
     options[namespace] = require(this.options.rootDir + '/static/UmbracoData.json');
 
     // Get the list of urls
-    const urlList = JSON.stringify(options[namespace].urlList);
+    const urlList = options[namespace].urlList;
 
     // Extends the nuxt routes
     setupRoutes.call(this, urlList);
