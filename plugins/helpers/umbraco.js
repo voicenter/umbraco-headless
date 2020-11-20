@@ -38,7 +38,7 @@ export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
 
             // check if we have children in object
             // and if child has url in urlList -> fill childrenUrls with [child key]:child url
-            if(objData.children && !(Object.entries(objData.children).length === 0 && objData.children.constructor === Object)) {
+            if(objData && objData.children && !(Object.entries(objData.children).length === 0 && objData.children.constructor === Object)) {
                 for(let [key, value] of Object.entries(objData.children)) {
                     tempPathString = pathString + '.children.' + key;
 
