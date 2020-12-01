@@ -1,18 +1,25 @@
 const {resolve, join} = require('path');
 const {readdirSync} = require('fs');
 const {setupRoutes} = require('./router');
+const DEFAULT_OPTIONS = {
+    namespace: 'Umbraco',
+    dataFilename: 'UmbracoData.json'
+}
 
 export default function (moduleOptions) {
     // Parse module options to var
-    const options = {...moduleOptions};
+    const options = {
+        ...DEFAULT_OPTIONS,
+        ...moduleOptions
+    };
 
-    // If namespace is parsed - use it if no - use default naming
-    if (!options.namespace) options.namespace = 'Umbraco';
-
-    const {namespace} = options;
+    const {
+        namespace,
+        dataFilename
+    } = options;
 
     // Parse the UmbracoData.json data into options
-    options[namespace] = require(this.options.rootDir + '/static/UmbracoData.json');
+    options[namespace] = require(`${this.options.rootDir}/static/${dataFilename}`);
 
     // Get the list of urls
     const urlList = options[namespace].urlList;
