@@ -15,19 +15,15 @@ Nuxt module that helps you to easily load your Umbraco data directly into your g
     ]
 }
 ```
-Also you can provide the name for the plugin and store by passing the options object on module include (default name is 'Umbraco'):
+### Options:
+The following options can be specified while setting the module:
 
-```js
-// nuxt.config.js
-{
-    modules: [
-        // ...
-        ['umbraco-headless', { namespace: 'MyUmbracoNuxt' }]
-    ]
-}
-```
-4. Make sure you have `UmbracoData.json` file in static folder of your nuxt project. 
-5. Make sure you have all the created components in your pages folder. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
+|    Option    |                    Description                     |   Default   |
+|--------------|:---------------------------------------------------|:-----------:|
+|   namespace  | The name of the Vuex module where data will be put |   Umbraco   |
+| dataFilename | The name of the Umbraco Data json file             | UmbracoData |
+
+4. Make sure you have all the created components in your pages folder. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
 
 :warning: Be aware that this module will automatically setup the Vuex storage for your Nuxt project. 
 
