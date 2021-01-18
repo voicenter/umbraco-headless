@@ -7,10 +7,10 @@ app.use(bodyParser.json())
 app.use(cors())
 
 function setupApi(data) {
-    const {siteData, urlList} = data
+    const {SiteData, urlList} = data
 
     app.get('/rootData/', (req, res) => {
-        let data = JSON.parse(JSON.stringify(siteData));
+        let data = JSON.parse(JSON.stringify(SiteData));
         const getChildren = req.query.getChildren || false;
 
         if (!getChildren) {
@@ -21,7 +21,7 @@ function setupApi(data) {
     })
 
     app.get('/byPath', (req, res) => {
-        const rootData = JSON.parse(JSON.stringify(siteData));
+        const rootData = JSON.parse(JSON.stringify(SiteData));
         const getChildren = req.query.getChildren || false;
         const path = req.query.path;
 
@@ -35,7 +35,7 @@ function setupApi(data) {
     })
 
     app.get('/byContentType', (req, res) => {
-        const rootData = JSON.parse(JSON.stringify(siteData));
+        const rootData = JSON.parse(JSON.stringify(SiteData));
         const contentType = req.query.contentType;
         const getChildren = req.query.getChildren || false;
         const data = {
