@@ -1,19 +1,14 @@
-import * as helpers from './helpers/umbraco.js'
+import JsonWorker from './helpers/umbraco.js'
 
 const namespace = <%= JSON.stringify(options.namespace) %>;
 
 export default ({ store, route }, inject) => {
     const { state } = store;
+    const jsonWorker = new JsonWorker(state, namespace);
 
     inject(namespace, {
-        LoadNuxtUmbracoData({ route }) {
-            return helpers.LoadNuxtUmbracoData({ state, route, namespace })
-        },
-        LoadRootData() {
-            return helpers.LoadRootData({ state, namespace })
-        },
-        log() {
-            return helpers.log({ state, namespace })
-        },
+        getNodeData({route}) {
+            return jsonWorker.getNodeData(route);
+        }
     })
 }

@@ -1,7 +1,10 @@
 const {resolve, join} = require('path');
 const {readdirSync} = require('fs');
 const {setupRoutes} = require('./router');
+const {setupApi} = require('./serverMiddleware');
 const DEFAULT_OPTIONS = {
+    dynamicStore: false,
+    apiPath: 'getJson',
     namespace: 'Umbraco',
     dataFilename: 'UmbracoData.json'
 }
@@ -26,6 +29,12 @@ export default function (moduleOptions) {
 
     // Extends the nuxt routes
     setupRoutes.call(this, urlList);
+
+    this.addServerMiddleware({ path: `/${options.apiPath}`, handler: setupApi(options[namespace]) });
+
+    if (!options.dynamicStore) {
+        return
+    }
 
     // If nuxt don't have store - enable it
     if (!this.options.store) this.options.store = true;

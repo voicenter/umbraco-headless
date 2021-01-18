@@ -6,7 +6,9 @@
   "author": "bohdan <bohdan.ko@voicenter.com>",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "jsonpath-plus": "^2.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "vue": "^2.6.12"
   }
 }

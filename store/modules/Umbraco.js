@@ -1,6 +1,6 @@
-export default (umbracoData) => ({
+export default () => ({
     namespaced: true,
     state: () => ({
-        ...umbracoData
+        SiteData: {}
     })
 })

@@ -1,83 +1,112 @@
 const {JSONPath} = require('jsonpath-plus');
 
-const storeModuleExists = (state, namespace) => {
-    if (!state || !state[namespace]) {
-        console.error(`${namespace} nuxt module error: store not initialized`);
-        return false
-    } else {
-        return true
+const getNodeDataFromFullDataAPI = (path) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const nodeData = fullData[path];
+
+            if (nodeData !== undefined && typeof nodeData === 'object') {
+                resolve(nodeData)
+            } else {
+                reject(new Error(`Cannot find data by "${path}" path`));
+            }
+        }, 2000)
+    })
+}
+
+class JsonWorker {
+    _state;
+    _namespace;
+    _storeSiteData;
+    _toIgnore;
+
+    constructor(state, namespace, toIgnore = []) {
+        this._state = state;
+        this._namespace = namespace;
+        this._toIgnore = toIgnore;
+        this._storeSiteData = this._state[this._namespace].SiteData;
     }
-};
 
-/**
- * Function to return the current value of the Umbraco object relative to the current path
- * and merge it with the values moving to the most parent path
- *
- * @param state
- * @param route
- * @param namespace
- * @returns {object}
- * @constructor
- */
-export const LoadNuxtUmbracoData = ({ state, route, namespace }) => {
-    if (!storeModuleExists(state, namespace)) return undefined;
+    _setPropertiesIfNotExists(obj, path, lastKeyValue = null) {
+        const pathArray = path.split('.');
 
-    let Jpath = route.meta[0].Jpath;// When calling /abc the slug will be "abc"
-    let NodeData = state[namespace].SiteData;
-    let pathArray = Jpath.split('.');
-    let finalData = {};
-    let pathString = '';
-    let tempPathString = '';
-    let urlList = state[namespace].urlList;
+        const setIfNotExists = (pathPartIndex) => {
+            const currentKey = pathArray[pathPartIndex];
 
-    for (let i = 0; i < pathArray.length; i++) {
-        pathString += i === 0 ? pathArray[i] : '.' + pathArray[i];
+            // Check if we already have current property in the object
+            if (!obj[currentKey]) {
+                // If not - set it
 
-        if (pathArray[i] !== 'children') {
-            let objData = JSONPath(pathString, NodeData)[0]
+                if (pathArray[pathPartIndex + 1]) {
+                    // Set an object as a value only in case we have more inner structure
+                    obj[currentKey] = {}
+                } else {
+                    // If not - set last key value
+                    obj[currentKey] = lastKeyValue
+                }
+            } else if (pathArray[pathPartIndex + 1]) {
+                // If yes and we have inner structure - move next
 
-            // check if we have children in object
-            // and if child has url in urlList -> fill childrenUrls with [child key]:child url
-            if(objData && objData.children && !(Object.entries(objData.children).length === 0 && objData.children.constructor === Object)) {
-                for(let [key, value] of Object.entries(objData.children)) {
-                    tempPathString = pathString + '.children.' + key;
+                pathPartIndex++;
 
-                    for(let j = 0; j < urlList.length; j++) {
-                        if(tempPathString === urlList[j].Jpath) {
-                            objData.children[key].url = urlList[j].url
-                            break;
-                        }
-                    }
-                    tempPathString = '';
+                setIfNotExists(pathPartIndex)
+            }
+        }
+
+        setIfNotExists(0)
+    }
+
+    _setStoreSiteData(key, value) {
+        this._storeSiteData[key] = value;
+    }
+
+    _nodeExistsInStore(path) {
+        return !!this._getNodeFromStore(path).length
+    }
+
+    _getNodeFromStore(path) {
+        return JSONPath(path, this._storeSiteData);
+    }
+
+    async _fillDataRecursively(path) {
+        const pathArray = path.split('.');
+
+        const fillNode = async (pathPartIndex) => {
+            const pathPart = pathArray[pathPartIndex];
+
+            if (!this._nodeExistsInStore(pathPart)) {
+                console.log('not exists', pathPart)
+
+                try {
+                    await this.setNodeDataFromApi(pathPart)
+                } catch (e) {
+                    console.log(e)
                 }
             }
 
-            Object.assign(finalData, objData);
+            pathPartIndex++;
+
+            if (pathPartIndex < pathArray.length) {
+                await fillNode(pathPartIndex)
+            }
+        }
+
+        await fillNode(0)
+    }
+
+    async getNodeData(path) {
+        if (this._nodeExistsInStore(path)) {
+            return this._getNodeFromStore(path);
+        } else {
+            await this._fillDataRecursively(path);
+
+            return this._getNodeFromStore(path);
         }
     }
 
-    return finalData
-};
+    async setNodeDataFromApi(path) {
+        const nodeData = await getNodeDataFromFullDataAPI(path)
 
-/**
- * Function to load the root Umbraco site data
- *
- * @param state
- * @param namespace
- * @returns {undefined|*}
- * @constructor
- */
-export const LoadRootData = ({ state, namespace }) => {
-    if (!storeModuleExists(state, namespace)) return undefined;
-
-    return state[namespace].SiteData;
-};
-
-// function to console log the current value of the Umbraco object
-export const log = (state, namespace) => {
-    if (!storeModuleExists(state, namespace)) return undefined;
-
-    const Umbraco = state[namespace];
-
-    return console.log(Umbraco)
-};
+        this._setStoreSiteData(path, nodeData)
+    }
+}
