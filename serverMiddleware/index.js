@@ -38,9 +38,7 @@ function setupApi(data) {
         const rootData = JSON.parse(JSON.stringify(SiteData));
         const contentType = req.query.contentType;
         const getChildren = req.query.getChildren || false;
-        const data = {
-            nodeList: []
-        }
+        const data = []
 
         Object.values(rootData.children).forEach(item => {
             if (item.ContentType === contentType) {
@@ -48,7 +46,7 @@ function setupApi(data) {
                     delete item.children
                 }
 
-                data.nodeList.push(item)
+                data.push(item)
             }
         })
 
