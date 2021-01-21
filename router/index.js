@@ -12,6 +12,10 @@ const setupRoutes = function (urlList) {
 
     this.extendRoutes(function umbracoModuleExtendRoutes(routes) {
         urlList.forEach(function (url) {
+            if (url.url === '' && url.TemplateAlias !== 'index') {
+                return;
+            }
+
             let componentName = url.TemplateAlias + '.vue';
 
             if (!files.includes(url.TemplateAlias + '.vue')) {
