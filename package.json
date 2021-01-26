@@ -1,14 +1,52 @@
 {
-  "name": "umbraco-headless",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/Regani/custom-umbraco-headless.git",
-  "author": "bohdan <bohdan.ko@voicenter.com>",
-  "license": "MIT",
+  "_args": [
+    [
+      "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+      "C:\\main\\Work\\programming\\voicenter\\officering-umbraco-nuxt"
+    ]
+  ],
+  "_from": "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+  "_id": "umbraco-headless@git://github.com/voicenter/umbraco-headless.git#dff144e1f75adb38f94d6b3881bbde72f13fd1c5",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/umbraco-headless",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+    "rawSpec": "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+    "saveSpec": "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+    "fetchSpec": "git://github.com/voicenter/umbraco-headless.git",
+    "gitCommittish": "rest-headless"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git://github.com/voicenter/umbraco-headless.git#dff144e1f75adb38f94d6b3881bbde72f13fd1c5",
+  "_spec": "git://github.com/voicenter/umbraco-headless.git#rest-headless",
+  "_where": "C:\\main\\Work\\programming\\voicenter\\officering-umbraco-nuxt",
+  "author": {
+    "name": "bohdan",
+    "email": "bohdan.ko@voicenter.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Regani/custom-umbraco-headless/issues"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "jsonpath-plus": "^2.0.0",
     "path": "^0.12.7",
+    "set-value": "^3.0.2",
     "vue": "^2.6.12"
-  }
+  },
+  "description": "Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.",
+  "homepage": "https://github.com/Regani/custom-umbraco-headless#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "name": "umbraco-headless",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Regani/custom-umbraco-headless.git"
+  },
+  "version": "1.0.0"
 }

@@ -1,8 +1,22 @@
-import umbracoModule from './modules/Umbraco';
+const {resolve, join} = require('path');
 
-const namespace = <%= JSON.stringify(options.namespace) %>;
-const umbracoData = <%= JSON.stringify(options[options.namespace]) %>;
+export default function setupStore(moduleOptions) {
+    if (!this.options.store) this.options.store = true;
 
-export default ({store}, inject) => {
-    store.registerModule(namespace, umbracoModule(umbracoData))
+    moduleOptions.storeData = {
+        SiteData: {},
+        GlobalData: {}
+    }
+
+    this.addPlugin({
+        src: resolve(__dirname, 'template.js'),
+        fileName: join(moduleOptions.namespace, 'store/template.js'),
+        options: moduleOptions
+    })
+
+    this.addTemplate({
+        src: resolve(__dirname, 'store.js'),
+        fileName: join(moduleOptions.namespace, 'store/store.js'),
+        options: moduleOptions
+    })
 }

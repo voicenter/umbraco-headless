@@ -1,14 +1,21 @@
-import JsonWorker from './helpers/umbraco.js'
+const {resolve, join} = require('path');
 
-const namespace = <%= JSON.stringify(options.namespace) %>;
+export default function setupPlugin(moduleOptions) {
+    this.addPlugin({
+        src: resolve(__dirname, 'template.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/template.js'),
+        options: moduleOptions
+    })
 
-export default ({ store, route }, inject) => {
-    const { state } = store;
-    const jsonWorker = new JsonWorker(state, namespace);
+    this.addTemplate({
+        src: resolve(__dirname, 'template.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/template.js'),
+        options: moduleOptions
+    })
 
-    inject(namespace, {
-        getNodeData({route}) {
-            return jsonWorker.getNodeData(route);
-        }
+    this.addTemplate({
+        src: resolve(__dirname, 'umbraco.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/umbraco.js'),
+        options: moduleOptions
     })
 }

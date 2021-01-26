@@ -1,9 +1,10 @@
 import {resolve} from 'path';
+
 const {readdirSync} = require('fs');
 
-const setupRoutes = function (urlList) {
+export default function setupRoutes(options) {
     // Get array of created pages
-    const files = JSON.stringify(readdirSync(this.options.rootDir + '/pages'));
+    const files = JSON.stringify(readdirSync(options.rootDir + '/pages'));
 
     // Convert files elements to string
     for (let file in files) {
@@ -11,11 +12,13 @@ const setupRoutes = function (urlList) {
     }
 
     this.extendRoutes(function umbracoModuleExtendRoutes(routes) {
-        urlList.forEach(function (url) {
+        options.umbracoData.urlList.forEach(function (url) {
             let componentName = url.TemplateAlias + '.vue';
 
             if (!files.includes(url.TemplateAlias + '.vue')) {
-                console.warn('The ' + url.TemplateAlias + ' component is not created, redirecting the ' + url.url + ' route to the index.vue component.');
+                if (!options.silent) {
+                    console.warn('The ' + url.TemplateAlias + ' component is not created, redirecting the ' + url.url + ' route to the index.vue component.');
+                }
 
                 componentName = 'index.vue';
             }
@@ -40,6 +43,3 @@ const setupRoutes = function (urlList) {
         })
     });
 }
-
-exports.setupRoutes = setupRoutes;
-

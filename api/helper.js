@@ -1,6 +1,7 @@
 const {JSONPath} = require('jsonpath-plus');
 
-exports.extendWithUrls = ({urlList, siteData}, path) => {
+// TODO: make sure that sql generates urls
+function extendWithUrls({urlList, siteData}, path)  {
     const NodeData = JSON.parse(JSON.stringify(siteData));
     const pathArray = path.split('.');
     let finalData = {};
@@ -34,5 +35,18 @@ exports.extendWithUrls = ({urlList, siteData}, path) => {
     }
 
     return finalData
-};
+}
 
+export function getByPath(umbracoData, query) {
+    const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
+    const path = query.path;
+
+    return extendWithUrls({siteData: rootData, urlList: umbracoData.urlList}, path);
+}
+
+export function getByContentType(umbracoData, query) {
+    const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
+    const contentType = query.contentType;
+
+    return Object.values(rootData.children).filter(item => item.ContentType === contentType);
+}
