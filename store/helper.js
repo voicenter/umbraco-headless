@@ -69,7 +69,19 @@ export function validateLoadObject({fetch, ignore, cache, globalKey, format}) {
     const isGlobalKeyValid = globalKey === undefined || validateGlobalKeyProperty(globalKey);
     const isFormatValid = format === undefined || validateFormatProperty(format);
 
-    return isFetchValid && isIgnoreValid && isCacheValid && isGlobalKeyValid && isFormatValid;
+    const isValid = isFetchValid && isIgnoreValid && isCacheValid && isGlobalKeyValid && isFormatValid;
+
+    if (!isValid) {
+        console.error(`Load object: ${{fetch, ignore, cache, globalKey, format}} is invalid.`,
+            `isFetchValid - ${isFetchValid}`,
+            `isIgnoreValid - ${isIgnoreValid}`,
+            `isCacheValid - ${isCacheValid}`,
+            `isGlobalKeyValid - ${isGlobalKeyValid}`,
+            `isFormatValid - ${isFormatValid}`,
+        )
+    }
+
+    return isValid;
 }
 
 export function proceedIgnoreObject(object, ignore) {
