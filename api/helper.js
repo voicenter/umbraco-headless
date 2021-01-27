@@ -1,7 +1,6 @@
 const {JSONPath} = require('jsonpath-plus');
 
-// TODO: make sure that sql generates urls
-function extendWithUrls({urlList, siteData}, path)  {
+export function extendWithParentData({urlList, siteData}, path) {
     const NodeData = JSON.parse(JSON.stringify(siteData));
     const pathArray = path.split('.');
     let finalData = {};
@@ -16,13 +15,14 @@ function extendWithUrls({urlList, siteData}, path)  {
 
             // check if we have children in object
             // and if child has url in urlList -> fill childrenUrls with [child key]:child url
-            if(objData && objData.children && !(Object.entries(objData.children).length === 0 && objData.children.constructor === Object)) {
-                for(let [key, value] of Object.entries(objData.children)) {
+            if (objData && objData.children && !(Object.entries(objData.children).length === 0 && objData.children.constructor === Object)) {
+                for (let [key, value] of Object.entries(objData.children)) {
                     tempPathString = pathString + '.children.' + key;
 
-                    for(let j = 0; j < urlList.length; j++) {
-                        if(tempPathString === urlList[j].Jpath) {
+                    for (let j = 0; j < urlList.length; j++) {
+                        if (tempPathString === urlList[j].Jpath) {
                             objData.children[key].url = urlList[j].url
+
                             break;
                         }
                     }
@@ -37,16 +37,20 @@ function extendWithUrls({urlList, siteData}, path)  {
     return finalData
 }
 
-export function getByPath(umbracoData, query) {
+export function getByPath(umbracoData, {path}) {
     const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
-    const path = query.path;
 
-    return extendWithUrls({siteData: rootData, urlList: umbracoData.urlList}, path);
+    return extendWithParentData({siteData: rootData, urlList: umbracoData.urlList}, path);
 }
 
-export function getByContentType(umbracoData, query) {
+export function getByContentType(umbracoData, {contentType}) {
     const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
-    const contentType = query.contentType;
 
-    return Object.values(rootData.children).filter(item => item.ContentType === contentType);
+    const filtered = Object.values(rootData.children).filter(item => {
+        return Array.isArray(contentType)
+            ? contentType.includes(item.contentType)
+            : item.ContentType === contentType
+    });
+
+    return filtered.map(item => extendWithParentData(umbracoData, item.jpath))
 }
