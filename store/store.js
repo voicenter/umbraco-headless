@@ -12,6 +12,9 @@ export default ({SiteData = {}, GlobalData = []}) => ({
         }
     },
     getters: {
+        getUmbracoData(store) {
+            return store
+        },
         getSiteData(store) {
             return store.SiteData;
         },

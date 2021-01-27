@@ -14,6 +14,12 @@ export default function setupPlugin(moduleOptions) {
     })
 
     this.addTemplate({
+        src: resolve('../store/', 'helper.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/helper.js'),
+        options: moduleOptions
+    })
+
+    this.addTemplate({
         src: resolve(__dirname, 'umbraco.js'),
         fileName: join(moduleOptions.namespace, 'plugin/umbraco.js'),
         options: moduleOptions
