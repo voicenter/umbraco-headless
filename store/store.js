@@ -20,6 +20,9 @@ export default ({SiteData = {}, GlobalData = []}) => ({
         },
         getGlobalData(store) {
             return store.GlobalData
+        },
+        getGlobalDataByKey: (store) => (key) => {
+            return store.GlobalData[key]
         }
     }
 })

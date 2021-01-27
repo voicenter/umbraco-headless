@@ -14,7 +14,7 @@ export default function setupPlugin(moduleOptions) {
     })
 
     this.addTemplate({
-        src: resolve('../store/', 'helper.js'),
+        src: resolve(__dirname + '/../api/', 'helper.js'),
         fileName: join(moduleOptions.namespace, 'plugin/helper.js'),
         options: moduleOptions
     })

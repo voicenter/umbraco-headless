@@ -33,7 +33,7 @@ export default class JsonWorker {
 
         switch (fetch.type) {
             case 'path':
-                let storeResult = getByPath(st.getters['Umbraco/getSiteData'], {
+                let storeResult = getByPath(st.getters['Umbraco/getUmbracoData'], {
                     path: fetch.pattern
                 })
 
@@ -45,7 +45,7 @@ export default class JsonWorker {
 
                 break;
             case 'contentType':
-                let storeResultContent = getByContentType(st.getters['Umbraco/getSiteData'], {
+                let storeResultContent = getByContentType(st.getters['Umbraco/getUmbracoData'], {
                     contentType: fetch.pattern
                 })
 
