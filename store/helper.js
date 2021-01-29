@@ -25,16 +25,7 @@ export function validateFetchProperty({type, pattern}) {
     const validTypes = ['path', 'contentType'];
 
     const validType = validator(type).isString() && validTypes.includes(type);
-    let validPattern = false;
-
-    switch (type) {
-        case 'path':
-            validPattern = validator(pattern).isString()
-
-            break;
-        case 'contentType':
-            validPattern = validator(pattern).isArray() && pattern.length > 0 && pattern.every(p => typeof p === 'string')
-    }
+    const validPattern = validator(pattern).isString();
 
     return validType && validPattern
 }

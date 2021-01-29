@@ -46,9 +46,5 @@ export function getByPath(umbracoData, {path}) {
 export function getByContentType(umbracoData, {contentType}) {
     const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
 
-    return Object.values(rootData.children).filter(item => {
-        return Array.isArray(contentType)
-            ? contentType.includes(item.ContentType)
-            : item.ContentType === contentType
-    })
+    return Object.values(rootData.children).filter(item => item.ContentType === contentType)
 }

@@ -23,11 +23,7 @@ export default function setupStore(moduleOptions) {
                 }
 
                 if (loadObject.globalKey) {
-                    if (!storeData.GlobalData[loadObject.globalKey]) {
-                        storeData.GlobalData[loadObject.globalKey] = [];
-                    }
-
-                    storeData.GlobalData[loadObject.globalKey].push(data);
+                    storeData.GlobalData[loadObject.globalKey] = data;
                 } else {
                     let path = data.jpath;
                     path = path.replace('$', 'SiteData')
