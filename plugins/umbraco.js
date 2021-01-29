@@ -33,11 +33,11 @@ export default class JsonWorker {
 
         switch (fetch.type) {
             case 'path':
-                let storeResult = getByPath(st.getters['Umbraco/getUmbracoData'], {
+                const storeResult = getByPath(st.getters['Umbraco/getUmbracoData'], {
                     path: fetch.pattern
                 })
 
-                if (!apiOnly && storeResult) {
+                if (!apiOnly && Object.keys(storeResult).length) {
                     data = storeResult
                 } else {
                     data = await this._getByPath(fetch.pattern).then(res => res.data);
@@ -45,11 +45,11 @@ export default class JsonWorker {
 
                 break;
             case 'contentType':
-                let storeResultContent = getByContentType(st.getters['Umbraco/getUmbracoData'], {
+                const storeResultContent = getByContentType(st.getters['Umbraco/getUmbracoData'], {
                     contentType: fetch.pattern
                 })
 
-                if (!apiOnly && storeResultContent) {
+                if (!apiOnly && Object.keys(storeResultContent).length) {
                     data = storeResultContent
                 } else {
                     data = await this._getByContentType(fetch.pattern).then(res => res.data);
