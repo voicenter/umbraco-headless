@@ -1,4 +1,5 @@
 import {resolve} from 'path';
+import removeTrailingSlash from "../helper/removeTrailingSlash";
 
 const {readdirSync} = require('fs');
 
@@ -25,7 +26,7 @@ export default function setupRoutes(options) {
 
             const route = {
                 name: url.nodeID,
-                path: url.url,
+                path: options.trailingSlashRedirect ? removeTrailingSlash(url.url) : url.url,
                 component: resolve('pages/' + componentName),
                 meta: url
             }

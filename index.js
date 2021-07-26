@@ -13,7 +13,7 @@ export default function (moduleOptions) {
     setupStore.call(this, options);
     setupPlugin.call(this, options);
 
-    if (moduleOptions.trailingSlashRedirect === true) {
+    if (options.trailingSlashRedirect === true) {
         setupTrailingSashModule.call(this, options)
     }
 }

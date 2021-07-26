@@ -2,6 +2,7 @@ import merge from 'deepmerge';
 
 export const defaults = {
     silent: false,
+    trailingSlashRedirect: false,
     api: {
         prefix: 'getJson',
         byPath: 'byPath',
