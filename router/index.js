@@ -1,9 +1,11 @@
 import {resolve} from 'path';
+import removeTrailingSlash from "../helper/removeTrailingSlash";
+
 const {readdirSync} = require('fs');
 
-const setupRoutes = function (urlList) {
+export default function setupRoutes(options) {
     // Get array of created pages
-    const files = JSON.stringify(readdirSync(this.options.rootDir + '/pages'));
+    const files = JSON.stringify(readdirSync(options.rootDir + '/pages'));
 
     // Convert files elements to string
     for (let file in files) {
@@ -11,37 +13,34 @@ const setupRoutes = function (urlList) {
     }
 
     this.extendRoutes(function umbracoModuleExtendRoutes(routes) {
-        urlList.forEach(function (url) {
-            if (url.url !== '' || url.TemplateAlias === 'index') {
-                let componentName = url.TemplateAlias + '.vue';
+        options.umbracoData.urlList.forEach(function (url) {
+            let componentName = url.TemplateAlias + '.vue';
 
-                if (!files.includes(url.TemplateAlias + '.vue')) {
+            if (!files.includes(url.TemplateAlias + '.vue')) {
+                if (!options.silent) {
                     console.warn('The ' + url.TemplateAlias + ' component is not created, redirecting the ' + url.url + ' route to the index.vue component.');
-
-                    componentName = 'index.vue';
                 }
 
-                const route = {
-                    name: url.nodeID,
-                    path: url.url,
-                    component: resolve('pages/' + componentName),
-                    meta: url
-                }
-
-                // Removes the automatically created routes by nuxt to prevent the duplicates
-                const duplicateIndex = routes.findIndex(function (route) {
-                    return route.name === url.TemplateAlias
-                })
-
-                if (duplicateIndex !== -1) {
-                    routes.splice(duplicateIndex, 1)
-                }
-
-                routes.push(route)
+                componentName = 'index.vue';
             }
+
+            const route = {
+                name: url.nodeID,
+                path: options.trailingSlashRedirect ? removeTrailingSlash(url.url) : url.url,
+                component: resolve('pages/' + componentName),
+                meta: url
+            }
+
+            // Removes the automatically created routes by nuxt to prevent the duplicates
+            const duplicateIndex = routes.findIndex(function (route) {
+                return route.name === url.TemplateAlias
+            })
+
+            if (duplicateIndex !== -1) {
+                routes.splice(duplicateIndex, 1)
+            }
+
+            routes.push(route)
         })
     });
 }
-
-exports.setupRoutes = setupRoutes;
-

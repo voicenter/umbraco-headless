@@ -1,19 +1,27 @@
-import * as helpers from './helpers/umbraco.js'
+const {resolve, join} = require('path');
 
-const namespace = <%= JSON.stringify(options.namespace) %>;
+export default function setupPlugin(moduleOptions) {
+    this.addPlugin({
+        src: resolve(__dirname, 'template.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/template.js'),
+        options: moduleOptions
+    })
 
-export default ({ store, route }, inject) => {
-    const { state } = store;
+    this.addTemplate({
+        src: resolve(__dirname, 'template.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/template.js'),
+        options: moduleOptions
+    })
 
-    inject(namespace, {
-        LoadNuxtUmbracoData({ route }) {
-            return helpers.LoadNuxtUmbracoData({ state, route, namespace })
-        },
-        LoadRootData() {
-            return helpers.LoadRootData({ state, namespace })
-        },
-        log() {
-            return helpers.log({ state, namespace })
-        },
+    this.addTemplate({
+        src: resolve(__dirname + '/../api/', 'helper.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/helper.js'),
+        options: moduleOptions
+    })
+
+    this.addTemplate({
+        src: resolve(__dirname, 'umbraco.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/umbraco.js'),
+        options: moduleOptions
     })
 }
