@@ -1,3 +1,4 @@
+
 ## umbraco-headless
 Nuxt module that helps you to easily load your Umbraco data directly into your great Nuxt project.
 
@@ -11,7 +12,7 @@ Nuxt module that helps you to easily load your Umbraco data directly into your g
 {
     modules: [
         // ...
-        'umbraco-headless'
+        '@voicenter/umbraco-headless'
     ]
 }
 ```
@@ -27,30 +28,84 @@ The following options can be specified while setting the module:
 
 :warning: Be aware that this module will automatically setup the Vuex storage for your Nuxt project.
 
+###2. Possible options of configuring the package inside nuxt.config.js
+```js
+    umbracoHeadless: {
+    trailingSlashRedirect: true || false //true value makes a 301 redirection to a non trailing slash URL,
+    prefetch: [] //Array of objects, that will be fetched and saved in your Vuex Store, default []
+}
+```
+Template is below
+```js
+ umbracoHeadless: {
+        trailingSlashRedirect: true || false,
+        prefetch: [
+            {
+                fetch: {
+                    type: 'contentType || path',
+                    
+                    pattern: value //contentType value if your fetch.type === 'contentType'
+                             Jpath //Your Component.Jpath if fetch.type === 'path'
+                    
+                },
+                globalKey: 'globalKeyString' //Your Component is available from
+                // Vuex store $store.getters['Umbraco/getGlobalDataByKey']('globalKeyString')
+                ignore: [
+                    {
+                        key: [''], // Array of Components Fields that you need to ignore, their values will be null
+                        excludeStartLevel: 0 //??
+                    }
+                ],
+            },
+        ]
+    }
+```
 ## Usage
 Just add the following to your pages components:
+
 ```js
-asyncData (context) {
-    return context.app.$Umbraco.LoadNuxtUmbracoData(context)
-}
+    async asyncData (context) {
+        const data = await context.$Umbraco.get(context, {
+            fetch: {
+                type: 'path',
+                pattern: context.route.meta[0].Jpath
+            },
+            apiOnly: true || false, //if apiOnly true your page will be fetched from api
+                            //if you component is available in Vue store you set apiOnly false and you component
+                            // will be fetched from your Vuex store
+        }) || {}
+        return data;
+    }
 ```
 Or if you provided custom namespace:
 ```js
-asyncData (context) {
-    return context.app.$[your_namespace].LoadNuxtUmbracoData(context)
-}
+    async asyncData (context) {
+        const data = await context.$[your_namespace].get(context, {
+            fetch: {
+                type: 'path',
+                pattern: context.route.meta[0].Jpath
+            },
+            apiOnly: true || false  //if apiOnly true your page will be fetched from api
+                                    //if you component is available in Vue store you set apiOnly false and you component
+                                    // will be fetched from your Vuex store
+        }) || {}
+        return data;
+    }
 ```
 
-## Available plugin methods
+If you want to fetch your Page by contentType:
 
-### `LoadNuxtUmbracoData`
-
-Returns the data for your component from Vuex Store
-
-### `log`
-
-Logs to console the whole Umbraco Vuex store
-
-### `LoadRootData`
-
-Returns the root Umbraco data from Vuex store
+```js
+    async asyncData (context) {
+        const data = await context.$Umbraco.get(context, {
+            fetch: {
+                type: 'contentType',
+                pattern: '[your content type value]'
+            },
+            apiOnly: true || false  //if apiOnly true your page will be fetched from api
+                                    //if you component is available in Vue store you set apiOnly false and you component
+                                    // will be fetched from your Vuex store
+        }) || {}
+        return data;
+    }
+```
