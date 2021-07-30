@@ -19,10 +19,12 @@ Nuxt module that helps you to easily load your Umbraco data directly into your g
 ### Options:
 The following options can be specified while setting the module:
 
-|    Option    |                    Description                     |   Default   |
-|--------------|:---------------------------------------------------|:-----------:|
-|   namespace  | The name of the Vuex module where data will be put |   Umbraco   |
-| dataFilename | The name of the Umbraco Data json file             | UmbracoData |
+|        Option             |                    Description                                         |   Default   |
+|---------------------------|:-----------------------------------------------------------------------|:-----------:|
+|       namespace           | The name of the Vuex module where data will be put                     |   Umbraco   |
+|     dataFilename          | The name of the Umbraco Data json file                                 | UmbracoData |
+|  trailingSlashRedirect    | The value makes a 301 redirection to a non trailing slash URL          |    false    |
+|       prefetch            | Array of objects, that will be fetched and saved in your Vuex store    |      []     |
 
 4. Make sure you have all the created components in your pages folder. But if you don't have all the needed components - the plugin will setup the index.vue component for all the missing components routes.
 
@@ -31,29 +33,33 @@ The following options can be specified while setting the module:
 ###2. Possible options of configuring the package inside nuxt.config.js
 ```js
     umbracoHeadless: {
-    trailingSlashRedirect: true || false //true value makes a 301 redirection to a non trailing slash URL,
-    prefetch: [] //Array of objects, that will be fetched and saved in your Vuex Store, default []
+    namespace: 'String',                          // Name of the Vuex module where data will be put
+    dataFileName: 'String',                       // Name of the Umbraco Data json file
+    trailingSlashRedirect: true || false,         // true value makes a 301 redirection to a non trailing slash URL,
+    prefetch: []                                  // Array of objects, that will be fetched and saved in your Vuex Store, default []
 }
 ```
 Template is below
 ```js
  umbracoHeadless: {
+        namespace: 'Umbraco',
+        dataFileName: 'UmbracoData',
         trailingSlashRedirect: true || false,
         prefetch: [
             {
                 fetch: {
                     type: 'contentType || path',
                     
-                    pattern: value //contentType value if your fetch.type === 'contentType'
-                             Jpath //Your Component.Jpath if fetch.type === 'path'
+                    pattern: value,                 // contentType value if your fetch.type === 'contentType'
+                             Jpath                  // Your Component.Jpath if fetch.type === 'path'
                     
                 },
-                globalKey: 'globalKeyString' //Your Component is available from
-                // Vuex store $store.getters['Umbraco/getGlobalDataByKey']('globalKeyString')
+                globalKey: 'globalKeyString',       // Your Component is available from
+                                                    // Vuex store $store.getters['Umbraco/getGlobalDataByKey']('globalKeyString')
                 ignore: [
                     {
-                        key: [''], // Array of Components Fields that you need to ignore, their values will be null
-                        excludeStartLevel: 0 //??
+                        key: [''],                  // Array of Component Fields that you need to ignore, their values will be null
+                        excludeStartLevel: 0        // Nesting level of your Component Fields you want to ignore, their values will be null
                     }
                 ],
             },
@@ -70,9 +76,9 @@ Just add the following to your pages components:
                 type: 'path',
                 pattern: context.route.meta[0].Jpath
             },
-            apiOnly: true || false, //if apiOnly true your page will be fetched from api
-                            //if you component is available in Vue store you set apiOnly false and you component
-                            // will be fetched from your Vuex store
+            apiOnly: true || false,                 // If apiOnly true your page will be fetched from api
+                                                    // If your Component is available in Vue store you set apiOnly false and your component
+                                                    // will be fetched from your Vuex store
         }) || {}
         return data;
     }
@@ -85,9 +91,9 @@ Or if you provided custom namespace:
                 type: 'path',
                 pattern: context.route.meta[0].Jpath
             },
-            apiOnly: true || false  //if apiOnly true your page will be fetched from api
-                                    //if you component is available in Vue store you set apiOnly false and you component
-                                    // will be fetched from your Vuex store
+            apiOnly: true || false                  // If apiOnly true your page will be fetched from api
+                                                    // If your Component is available in Vue store you set apiOnly false and your component
+                                                    // will be fetched from your Vuex store
         }) || {}
         return data;
     }
@@ -102,9 +108,9 @@ If you want to fetch your Page by contentType:
                 type: 'contentType',
                 pattern: '[your content type value]'
             },
-            apiOnly: true || false  //if apiOnly true your page will be fetched from api
-                                    //if you component is available in Vue store you set apiOnly false and you component
-                                    // will be fetched from your Vuex store
+            apiOnly: true || false                 // If apiOnly true your page will be fetched from api
+                                                   // If your Component is available in Vue store you set apiOnly false and your component
+                                                   // will be fetched from your Vuex store
         }) || {}
         return data;
     }
