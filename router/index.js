@@ -24,9 +24,11 @@ export default function setupRoutes(options) {
                 componentName = 'index.vue';
             }
 
+            const path = options.trailingSlashRedirect ? removeTrailingSlash(url.url) : url.url
+
             const route = {
                 name: url.nodeID,
-                path: options.trailingSlashRedirect ? removeTrailingSlash(url.url) : url.url,
+                path: encodeURI(path),
                 component: resolve('pages/' + componentName),
                 meta: url
             }
