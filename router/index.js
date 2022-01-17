@@ -5,12 +5,7 @@ const {readdirSync} = require('fs');
 
 export default function setupRoutes(options) {
     // Get array of created pages
-    const files = JSON.stringify(readdirSync(options.rootDir + '/pages'));
-
-    // Convert files elements to string
-    for (let file in files) {
-        if (files.hasOwnProperty(file)) file = `"${file}"`
-    }
+    const files = readdirSync(options.rootDir + '/pages');
 
     this.extendRoutes(function umbracoModuleExtendRoutes(routes) {
         options.umbracoData.urlList.forEach(function (url) {
