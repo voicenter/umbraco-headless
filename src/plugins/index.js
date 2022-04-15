@@ -14,8 +14,14 @@ export default function setupPlugin(moduleOptions) {
     })
 
     this.addTemplate({
-        src: resolve(__dirname + '/../api/', 'helper.js'),
+        src: resolve(__dirname + '/../helper/', 'helper.js'),
         fileName: join(moduleOptions.namespace, 'plugin/helper.js'),
+        options: moduleOptions
+    })
+
+    this.addTemplate({
+        src: resolve(__dirname + '/../helper/', 'objectWorker.js'),
+        fileName: join(moduleOptions.namespace, 'plugin/objectWorker.js'),
         options: moduleOptions
     })
 

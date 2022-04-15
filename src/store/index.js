@@ -1,13 +1,11 @@
 const {resolve, join} = require('path');
-const {getByPath, getByContentType} = require('../api/helper');
-const helper = require('./helper');
-const set = require('set-value');
+const helper = require('../helper/objectWorker');
+const {getByPath, getByContentType} = require('../helper/helper')
 
 export default function setupStore(moduleOptions) {
     if (!this.options.store) this.options.store = true;
 
     const storeData = {
-        SiteData: {},
         GlobalData: {}
     }
 
@@ -16,20 +14,19 @@ export default function setupStore(moduleOptions) {
             if (!helper.validateLoadObject(loadObject)) return;
 
             function setToStore(data) {
-                helper.proceedIgnore(data, loadObject.ignore);
+                if (Array.isArray(loadObject.include) && loadObject.include.length > 0) {
+                    data = helper.proceedInclude(data, loadObject.include)
+                }
+
+                if (Array.isArray(loadObject.ignore) && loadObject.ignore.length > 0) {
+                    helper.proceedIgnore(data, loadObject.ignore);
+                }
 
                 if (loadObject.format) {
                     data = loadObject.format(data)
                 }
 
-                if (loadObject.globalKey) {
-                    storeData.GlobalData[loadObject.globalKey] = data;
-                } else {
-                    let path = data.jpath;
-                    path = path.replace('$', 'SiteData')
-
-                    set(storeData, path, data);
-                }
+                storeData.GlobalData[loadObject.globalKey] = data;
             }
 
             if (loadObject.fetch.type === 'path') {

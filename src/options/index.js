@@ -3,11 +3,6 @@ import merge from 'deepmerge';
 export const defaults = {
     silent: false,
     trailingSlashRedirect: false,
-    api: {
-        prefix: 'getJson',
-        byPath: 'byPath',
-        byContentType: 'byContentType'
-    },
     namespace: 'Umbraco',
     dataFilename: 'UmbracoData.json',
     prefetch: []

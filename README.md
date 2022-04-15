@@ -49,9 +49,7 @@ Template is below
             {
                 fetch: {
                     type: 'contentType || path',
-                    
-                    pattern: value,                 // contentType value if your fetch.type === 'contentType'
-                             Jpath                  // Your Component.Jpath if fetch.type === 'path'
+                    pattern: value,                 // contentType or jpath value
                     
                 },
                 globalKey: 'globalKeyString',       // Your Component is available from
