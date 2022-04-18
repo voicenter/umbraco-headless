@@ -45,6 +45,7 @@ Template is below
         namespace: 'Umbraco',
         dataFileName: 'UmbracoData',
         trailingSlashRedirect: true || false,
+        getUmbracoDataAPI: 'someapi.com', // an API where plugin will do fetch reuqests to load Umbraco Data
         prefetch: [
             {
                 fetch: {
