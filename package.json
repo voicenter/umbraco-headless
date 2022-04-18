@@ -14,7 +14,13 @@
     "src/options/*",
     "src/plugins/*",
     "src/router/*",
-    "src/store/*"
+    "src/store/*",
+    "playground/components",
+    "playground/layouts",
+    "playground/pages",
+    "playground/static",
+    "playground/store",
+    "playground/package.json"
   ],
   "homepage": "https://github.com/voicenter/umbraco-headless#readme",
   "license": "MIT",
