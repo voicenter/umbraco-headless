@@ -131,4 +131,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+node_modules
+
+playground/.nuxt
+playground/node_modules
+playground/dist
+playground/.output
+
 # End of https://www.gitignore.io/api/linux,windows,webstorm
