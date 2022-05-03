@@ -20,7 +20,7 @@ export default {
       return links.map(link => {
         return {
           label: link.navMainItemTitle,
-          to: link.url
+          to: link.navMainItemLink
         }
       })
     }
