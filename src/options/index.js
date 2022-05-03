@@ -1,25 +1,117 @@
 import merge from 'deepmerge';
+import {existsSync} from 'fs'
+import {join} from 'path'
 
 export const defaults = {
-    silent: false,
-    trailingSlashRedirect: false,
-    namespace: 'Umbraco',
-    dataFilename: 'UmbracoData.json',
-    prefetch: []
+  getUmbracoDataAPI: {
+    default: null,
+    required: true,
+  },
+  silent: {
+    default: false,
+    required: false
+  },
+  trailingSlashRedirect: {
+    default: false,
+    required: false
+  },
+  namespace: {
+    default: 'Umbraco',
+    required: true
+  },
+  dataFilename: {
+    default: 'UmbracoData.json',
+    required: true
+  },
+  nodeID: {
+    default: null,
+    required: true
+  },
+  dbName: {
+    default: null,
+    required: true
+  },
+  dbUsername: {
+    default: null,
+    required: true
+  },
+  dbPassword: {
+    default: null,
+    required: true
+  },
+  dbHost: {
+    default: null,
+    required: true
+  },
+  modePath: {
+    default: null,
+    required: false
+  },
+  prefetch: {
+    default: [],
+    required: false
+  },
+  redirects: {
+    default: {
+      enable: false,
+      redirectFolderName: 'redirectFolder',
+      rootChildrenUmbracoPath: 'SiteData.children',
+      enableInDevelopment: false
+    },
+    required: false
+  }
 };
 
-export default function initOptions(moduleOptions) {
-    const nuxtOptionsToSync = ['rootDir', 'store'];
+const NUXT_OPTIONS_TO_SYNC = ['rootDir', 'store'];
 
-    const options = merge.all([
-        defaults,
-        this.options.umbracoHeadless || {},
-        moduleOptions || {}
-    ]);
+function invalidConfigParam(param) {
+  return param === null || param === undefined || param === ''
+}
 
-    nuxtOptionsToSync.forEach(option => options[option] = this.options[option]);
+function readConfigFile(rootDir) {
+  const configFilePath = join(rootDir, 'umbraco-headless.config.js')
 
-    options.umbracoData = require(`${options.rootDir}/static/${options.dataFilename}`);
+  if (!existsSync(configFilePath)) {
+    throw new Error('Please, create umbraco-headless.config.js in root directory')
+  }
 
-    return options;
+  return new Promise(resolve => {
+    import(configFilePath)
+      .then(config => {
+        resolve(config.default)
+      })
+  })
+}
+
+function validateConfig(config) {
+  const invalid = []
+  const mergedConfig = {}
+
+  Object.entries(defaults).forEach(([key, value]) => {
+    mergedConfig[key] = config[key] || value.default
+
+    if (invalidConfigParam(mergedConfig[key])) {
+      invalid.push(key)
+    }
+  })
+
+  if (invalid.length) {
+    throw new Error(`Missing required config: ${invalid.join(', ')}`)
+  }
+
+  return mergedConfig
+}
+
+export default async function initOptions(moduleOptions) {
+  const configFileOptions = validateConfig(await readConfigFile(this.options.rootDir))
+
+  const options = merge.all([
+    this.options.umbracoHeadless || {},
+    moduleOptions || {},
+    configFileOptions
+  ]);
+
+  NUXT_OPTIONS_TO_SYNC.forEach(option => options[option] = this.options[option])
+
+  return options
 }

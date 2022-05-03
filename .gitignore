@@ -131,11 +131,15 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-node_modules
+node_modules/
 
 playground/.nuxt
 playground/node_modules
 playground/dist
 playground/.output
+playground/.env
+playground/static/robots.txt
+playground/static/sitemap.xml
+playground/static/UmbracoData.json
 
 # End of https://www.gitignore.io/api/linux,windows,webstorm

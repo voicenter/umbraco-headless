@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLink v-for="({to, label}, index) in navItemList"
+    <NuxtLink v-for="({to, label}, index) in navigationLinks"
               :key="index"
               :to="to"
               style="margin: 15px;"
@@ -13,18 +13,16 @@
 <script>
 export default {
   name: 'Navbar',
-  data() {
-    return {
-      navItemList: [
-        {
-          label: 'About us',
-          to: '/about-us'
-        },
-        {
-          label: 'Home',
-          to: '/'
+  computed: {
+    navigationLinks() {
+      const links = Object.values(this.$store.getters['Umbraco/getGlobalDataByKey']('websiteMainNavigation').children) || []
+
+      return links.map(link => {
+        return {
+          label: link.navMainItemTitle,
+          to: link.url
         }
-      ]
+      })
     }
   }
 }
