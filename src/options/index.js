@@ -23,29 +23,13 @@ export const defaults = {
     default: 'UmbracoData.json',
     required: true
   },
-  nodeID: {
+  generateUmbracoDataAPI: {
     default: null,
     required: true
   },
-  dbName: {
+  site: {
     default: null,
     required: true
-  },
-  dbUsername: {
-    default: null,
-    required: true
-  },
-  dbPassword: {
-    default: null,
-    required: true
-  },
-  dbHost: {
-    default: null,
-    required: true
-  },
-  modePath: {
-    default: null,
-    required: false
   },
   prefetch: {
     default: [],
@@ -88,7 +72,9 @@ function validateConfig(config) {
   const mergedConfig = {}
 
   Object.entries(defaults).forEach(([key, value]) => {
-    mergedConfig[key] = config[key] || value.default
+    mergedConfig[key] = config[key] === undefined
+      ? value.default
+      : config[key]
 
     if (invalidConfigParam(mergedConfig[key])) {
       invalid.push(key)

@@ -1,11 +1,7 @@
 export default {
-  getUmbracoDataAPI: 'https://voicenter-umbraco-data.voicenter-ltd.workers.dev/',
-  nodeID: process.env.NODE_ID,
-  dbName: process.env.DB_NAME,
-  dbUsername: process.env.DB_USERNAME,
-  dbPassword: process.env.DB_PASSWORD,
-  dbHost: process.env.DB_HOST,
-  modePath: 'SiteData.mode',
+  getUmbracoDataAPI: 'https://nuxt-umbraco-api.voicenter-ltd.workers.dev/',
+  generateUmbracoDataAPI: 'http://localhost:3030',
+  site: 'voice_he_prod',
   redirects: {
     enable: true,
     redirectFolderName: 'redirectFolder',

@@ -21,12 +21,8 @@ The following options can be specified while setting the module:
 | Option                            | Description                                                                                                                                | Default           | Required |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | :---------------: | :------: |
 | getUmbracoDataAPI                 | An URI where plugin will do a POST requests in order to fetch Umbraco Data                                                                 | -                 | true     |
-| nodeID                            | An ID of your Node from umbraco                                                                                                            | -                 | true     |
-| dbName                            | Name of the Umbraco DB                                                                                                                     | -                 | true     |
-| dbUsername                        | Umbraco DB username                                                                                                                        | -                 | true     |
-| dbPassword                        | Umbraco DB dbPassword                                                                                                                      | -                 | true     |
-| dbHost                            | Umbraco DB Host                                                                                                                            | -                 | true     |
-| modePath                          | Path to the umbraco field by which plugin will know if is in production/development mode (value should be 1 - production, 0 - development) | -                 | false    |
+| generateUmbracoDataAPI            | An URI where plugin will do a POST requests in order to fetch sitemap.xml robots.txt, umbracodata.json to generate files                   | -                 | true     |
+| site                              | The name of the website                                                                                                                    | -                 | true     |
 | trailingSlashRedirect             | The value makes a 301 redirection to a non trailing slash URL                                                                              | false             | false    |
 | redirects                         | -                                                                                                                                          | -                 | false    |
 | redirects.enable                  | If to enable 301 redirects                                                                                                                 | false             | -        |
@@ -42,13 +38,9 @@ Example:
 ```js
 // umbraco-headless.config.js
 export default {
-  getUmbracoDataAPI: 'https://voicenter-umbraco-data.voicenter-ltd.workers.dev/',
-  nodeID: process.env.NODE_ID,
-  dbName: process.env.DB_NAME,
-  dbUsername: process.env.DB_USERNAME,
-  dbPassword: process.env.DB_PASSWORD,
-  dbHost: process.env.DB_HOST,
-  modePath: 'SiteData.mode',
+  getUmbracoDataAPI: 'https://nuxt-umbraco-api.voicenter-ltd.workers.dev/',
+  generateUmbracoDataAPI: 'http://localhost:3030',
+  site: 'voice_he_prod',
   redirects: {
     enable: true,
     redirectFolderName: 'redirectFolder',

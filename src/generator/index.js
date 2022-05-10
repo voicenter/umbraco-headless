@@ -1,16 +1,14 @@
 import {resolve, join} from 'path'
 import {existsSync, mkdirSync, writeFileSync} from 'fs'
 
-import DB_WORKER from './util/db'
+import ApiWorker from './util/ApiWorker'
 
 export default async function generateUmbracoFiles(options) {
-  const dbWorker = new DB_WORKER(options)
+  const apiWorker = new ApiWorker(options)
 
-  await dbWorker.init()
-
-  const umbracoData = dbWorker.getJsonData()
-  const robotsText = await dbWorker.getRobotTXT()
-  const siteMapXML = await dbWorker.getSiteMAP()
+  const umbracoData = await apiWorker.getJsonData()
+  const robotsText = await apiWorker.getRobotsTxt()
+  const siteMapXML = await apiWorker.getSitemapXML()
 
   const staticPath = join(options.rootDir, 'static')
 

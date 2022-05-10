@@ -4,9 +4,10 @@ export default class JsonWorker {
     _namespace;
     _getUmbracoDataAPI;
 
-    constructor({namespace, getUmbracoDataAPI, axios}) {
+    constructor({namespace, getUmbracoDataAPI, site, axios}) {
         this._namespace = namespace;
         this._getUmbracoDataAPI = getUmbracoDataAPI;
+        this._site = site
         this._axios = axios;
     }
 
@@ -15,7 +16,10 @@ export default class JsonWorker {
             method: 'post',
             withCredentials: false,
             url: this._getUmbracoDataAPI,
-            data: fetch
+            data: {
+              ...fetch,
+              site: this._site
+            }
         })
     }
 
