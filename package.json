@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "files": [
     "playground/**/*",
-    "playground/**/*"
+    "src/**/*"
   ],
   "homepage": "https://github.com/voicenter/umbraco-headless#readme",
   "license": "MIT",
