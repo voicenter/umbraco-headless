@@ -1,7 +1,7 @@
 const {JSONPath} = require('jsonpath-plus');
 
-export function extendWithParentData({urlList, siteData}, path) {
-    const NodeData = JSON.parse(JSON.stringify(siteData));
+export function extendWithParentData({urlList, SiteData}, path) {
+    const NodeData = JSON.parse(JSON.stringify(SiteData));
     const pathArray = path.split('.');
     let finalData = {};
     let pathString = '';
@@ -37,14 +37,12 @@ export function extendWithParentData({urlList, siteData}, path) {
     return finalData
 }
 
-export function getByPath(umbracoData, {path}) {
-    const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
-
-    return extendWithParentData({siteData: rootData, urlList: umbracoData.urlList}, path);
+export function getByPath(umbracoData, path) {
+    return extendWithParentData(umbracoData, path);
 }
 
-export function getByContentType(umbracoData, {contentType}) {
-    const rootData = JSON.parse(JSON.stringify(umbracoData.SiteData));
-
-    return rootData.children ? Object.values(rootData.children).filter(item => item.ContentType === contentType) : {}
+export function getByContentType(umbracoData, contentType) {
+    return umbracoData?.SiteData?.children
+      ? Object.values(umbracoData.SiteData.children).filter(item => item.ContentType === contentType)
+      : {}
 }

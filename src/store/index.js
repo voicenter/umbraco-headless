@@ -30,11 +30,11 @@ export default function setupStore(moduleOptions) {
       }
 
       if (loadObject.fetch.type === 'path') {
-        let result = getByPath(moduleOptions.umbracoData, {path: loadObject.fetch.pattern});
+        let result = getByPath(moduleOptions.umbracoData, loadObject.fetch.pattern);
 
         setToStore(result);
       } else if (loadObject.fetch.type === 'contentType') {
-        let resultList = getByContentType(moduleOptions.umbracoData, {contentType: loadObject.fetch.pattern});
+        let resultList = getByContentType(moduleOptions.umbracoData, loadObject.fetch.pattern);
 
         resultList.forEach(resultEl => setToStore(resultEl))
       }
