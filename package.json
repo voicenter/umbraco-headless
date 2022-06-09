@@ -21,8 +21,7 @@
     "url": "https://github.com/voicenter/umbraco-headless/issues"
   },
   "scripts": {
-    "playground": "cd playground && npm run dev",
-    "postinstall": "cd playground && npm install"
+    "playground": "cd playground && npm run dev"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",

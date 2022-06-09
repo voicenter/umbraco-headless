@@ -1,6 +1,6 @@
 export default {
-  getUmbracoDataAPI: 'https://nuxt-umbraco-api.voicenter-ltd.workers.dev/',
-  generateUmbracoDataAPI: 'http://localhost:3030',
+  getUmbracoDataAPI: 'https://www.voicenter.com/umbraco-data/',
+  generateUmbracoDataAPI: 'https://umbraco-api.voicenter.co',
   site: 'voice_he_prod',
   redirects: {
     enable: true,
