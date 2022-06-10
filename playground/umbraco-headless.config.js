@@ -1,7 +1,7 @@
 export default {
   getUmbracoDataAPI: 'https://www.voicenter.com/umbraco-data/',
   generateUmbracoDataAPI: 'https://umbraco-api.voicenter.co',
-  site: 'voice_he_prod',
+  site: 'voice-he-prod',
   redirects: {
     enable: true,
     redirectFolderName: 'redirectFolder',

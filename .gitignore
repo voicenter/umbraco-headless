@@ -138,6 +138,7 @@ playground/node_modules
 playground/dist
 playground/.output
 playground/.env
+playground/static/_redirects
 playground/static/robots.txt
 playground/static/sitemap.xml
 playground/static/UmbracoData.json

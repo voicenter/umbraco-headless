@@ -1,4 +1,6 @@
 import {JSONPath} from 'jsonpath-plus'
+import {join} from 'path'
+import {writeFileSync} from 'fs'
 
 function getRedirects(moduleOptions) {
   const umbracoData = require(`${moduleOptions.rootDir}/static/UmbracoData.json`)
@@ -28,8 +30,16 @@ function getRedirects(moduleOptions) {
   return redirectsArray
 }
 
-export default function setupRedirectsMiddleware(moduleOptions) {
+export default function setupRedirects(moduleOptions) {
   const redirectUrls = getRedirects(moduleOptions)
+
+  const redirectsFilePath = join(moduleOptions.rootDir, 'static', '_redirects')
+
+  const redirectsString = redirectUrls
+    .map(({oldUrl, newUrl}) => `${encodeURI(oldUrl)} ${encodeURI(newUrl)} 301`)
+    .join('\n')
+
+  writeFileSync(redirectsFilePath, redirectsString)
 
   this.addServerMiddleware((req, res, next) => {
     const isProduction = process.env.NODE_ENV === 'production'

@@ -4,7 +4,7 @@ import setupRoutes from './router';
 import setupStore from './store';
 import setupPlugin from './plugins';
 import setupTrailingMiddleware from './serverMiddlewares/trailing';
-import setupRedirectsMiddleware from './serverMiddlewares/redirects';
+import setupRedirects from './serverMiddlewares/redirects';
 
 export default async function (moduleOptions) {
   const options = await initOptions.call(this, moduleOptions)
@@ -20,7 +20,7 @@ export default async function (moduleOptions) {
   }
 
   if (options?.redirects?.enable === true) {
-    setupRedirectsMiddleware.call(this, options)
+    setupRedirects.call(this, options)
   }
 }
 
