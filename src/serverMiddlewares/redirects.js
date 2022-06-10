@@ -61,7 +61,7 @@ export default function setupRedirects(moduleOptions) {
 
     const url = urlRedirect ? urlRedirect.newUrl : req.url
 
-    res.writeHead(301, {Location: url})
+    res.writeHead(301, {Location: encodeURI(url)})
     res.end()
   })
 }
