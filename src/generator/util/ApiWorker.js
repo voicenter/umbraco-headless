@@ -13,12 +13,20 @@ export default class ApiWorker {
     return `${this._baseUrl}/${urlPart}?site=${this._site}`
   }
 
-  _baseGetRequest(urlPart) {
-    return axios({
-      method: 'get',
-      withCredentials: false,
-      url: this._urlWithParams(urlPart)
-    })
+  async _baseGetRequest(urlPart) {
+    let result = ''
+
+    try {
+      result = await axios({
+        method: 'get',
+        withCredentials: false,
+        url: this._urlWithParams(urlPart)
+      })
+    } catch (e) {
+      console.log(`Failed to make request to ${this._urlWithParams(urlPart)}`, e)
+    }
+
+    return result
   }
 
   async getUrlList() {
