@@ -14,7 +14,11 @@ export default class ApiWorker {
   }
 
   async _baseGetRequest(urlPart) {
-    let result = ''
+    let result = {
+      data: {
+        data: ''
+      }
+    }
 
     try {
       result = await axios({
