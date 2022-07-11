@@ -42,9 +42,9 @@ export function getByPath(umbracoData, path) {
 }
 
 export function getByContentType(umbracoData, contentType) {
-    const hasChildren = (umbracoData.SiteData !== undefined || true) && (umbracoData.SiteData !== undefined || null)
+    const hasChildren = (umbracoData.SiteData !== undefined || true) && (umbracoData.SiteData.children !== undefined || null)
 
     return hasChildren
       ? Object.values(umbracoData.SiteData.children).filter(item => item.ContentType === contentType)
-      : {}
+      : []
 }

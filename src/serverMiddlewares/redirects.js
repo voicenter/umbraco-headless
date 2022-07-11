@@ -6,7 +6,7 @@ function getRedirects(moduleOptions) {
   const umbracoData = require(`${moduleOptions.rootDir}/static/UmbracoData.json`)
 
   // Get root umbraco elements
-  const rootChildren = JSONPath(moduleOptions.redirects.rootChildrenUmbracoPath, umbracoData)[0]
+  const rootChildren = JSONPath(moduleOptions.redirects.rootChildrenUmbracoPath, umbracoData)[0] || {}
 
   // Find redirects folder
   const redirectsFolder = Object.keys(rootChildren).find(key => key.includes(moduleOptions.redirects.redirectFolderName))
