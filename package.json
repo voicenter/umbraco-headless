@@ -5,17 +5,10 @@
     "name": "bohdan",
     "email": "bohdan.ko@voicenter.com"
   },
-  "version": "1.0.3",
-  "main": "index.js",
+  "version": "2.0.0",
+  "main": "src/index.js",
   "files": [
-    "index.js",
-    "api/*",
-    "helper/*",
-    "modules/*",
-    "options/*",
-    "plugins/*",
-    "router/*",
-    "store/*"
+    "src/**/*"
   ],
   "homepage": "https://github.com/voicenter/umbraco-headless#readme",
   "license": "MIT",
@@ -26,9 +19,14 @@
   "bugs": {
     "url": "https://github.com/voicenter/umbraco-headless/issues"
   },
+  "scripts": {
+    "playground": "cd playground && npm run dev"
+  },
   "dependencies": {
-    "cors": "^2.8.5",
-    "jsonpath-plus": "^2.0.0",
+    "deepmerge": "^4.2.2",
+    "jsonpath-plus": "^6.0.1",
+    "lodash": "^4.17.21",
+    "mssql": "^6.0.1",
     "path": "^0.12.7",
     "set-value": "^3.0.2",
     "vue": "^2.6.12"

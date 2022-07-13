@@ -1,3 +1,6 @@
+const get = require('lodash/get')
+const set = require('lodash/set')
+
 export function validator(value) {
     return {
         isString: () => {
@@ -104,4 +107,14 @@ export function proceedIgnoreObject(object, ignore) {
 
 export function proceedIgnore(object, ignoreList) {
     ignoreList.forEach(ignore => proceedIgnoreObject(object, ignore))
+}
+
+export function proceedInclude (object, includeList) {
+    const data = {}
+
+    includeList.forEach(include => {
+        set(data, include, get(object, include, null))
+    })
+
+    return data
 }
