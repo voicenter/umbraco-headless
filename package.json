@@ -5,7 +5,7 @@
     "name": "bohdan",
     "email": "bohdan.ko@voicenter.com"
   },
-  "version": "2.0.0",
+  "version": "1.0.3",
   "main": "src/index.js",
   "files": [
     "src/**/*"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Regani/custom-umbraco-headless.git"
+    "url": "git+https://github.com/voicenter/umbraco-headless.git"
   },
   "bugs": {
     "url": "https://github.com/voicenter/umbraco-headless/issues"
