@@ -1,9 +1,11 @@
 import {JSONPath} from 'jsonpath-plus'
-import {join} from 'path'
+import set from 'lodash/set'
+import {join, resolve} from 'path'
 import {writeFileSync} from 'fs'
 
 function getRedirects(moduleOptions) {
-  const umbracoData = require(`${moduleOptions.rootDir}/static/UmbracoData.json`)
+  const staticPath = join(moduleOptions.rootDir, 'static')
+  const umbracoData = moduleOptions.umbracoData //resolve(staticPath, moduleOptions.dataFilename)
 
   // Get root umbraco elements
   const rootChildren = JSONPath(moduleOptions.redirects.rootChildrenUmbracoPath, umbracoData)[0] || {}
@@ -26,6 +28,10 @@ function getRedirects(moduleOptions) {
       newUrl
     })
   })
+
+  // Remove redirect folder object from json
+  set(umbracoData, `${moduleOptions.redirects.rootChildrenUmbracoPath}.${redirectsFolder}`, {})
+  writeFileSync(resolve(staticPath, moduleOptions.dataFilename), JSON.stringify(umbracoData, null, 2))
 
   return redirectsArray
 }

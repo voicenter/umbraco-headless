@@ -11,16 +11,16 @@ export default async function (moduleOptions) {
 
   options.umbracoData = await generateUmbracoFiles.call(this, options)
 
+  if (options?.redirects?.enable === true) {
+    setupRedirects.call(this, options)
+  }
+
   setupRoutes.call(this, options);
   setupStore.call(this, options);
   setupPlugin.call(this, options);
 
   if (options.trailingSlashRedirect === true) {
     setupTrailingMiddleware.call(this, options)
-  }
-
-  if (options?.redirects?.enable === true) {
-    setupRedirects.call(this, options)
   }
 }
 
