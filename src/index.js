@@ -6,10 +6,17 @@ import setupPlugin from './plugins';
 import setupTrailingMiddleware from './serverMiddlewares/trailing';
 import setupRedirects from './serverMiddlewares/redirects';
 
+console.log('IN UMBRACO HEADLESS 1')
+
 export default async function (moduleOptions) {
+  console.log('IN UMBRACO HEADLESS', moduleOptions)
   const options = await initOptions.call(this, moduleOptions)
 
+  console.log('OPTIONS', options)
+
   options.umbracoData = await generateUmbracoFiles.call(this, options)
+
+  console.log('UMBRACO DATA', options.umbracoData)
 
   if (options?.redirects?.enable === true) {
     setupRedirects.call(this, options)
