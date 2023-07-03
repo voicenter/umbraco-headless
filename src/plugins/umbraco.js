@@ -1,5 +1,3 @@
-const {proceedInclude, proceedIgnore} = require('./objectWorker')
-
 export default class JsonWorker {
     _namespace;
     _getUmbracoDataAPI;
@@ -23,16 +21,8 @@ export default class JsonWorker {
         })
     }
 
-    async getNodeData({fetch, include, ignore}) {
-        let {data} = await this._getFromAPI(fetch)
-
-        if (Array.isArray(include) && include.length > 0) {
-            data = proceedInclude(data, include)
-        }
-
-        if (Array.isArray(ignore) && ignore.length > 0) {
-            proceedIgnore(data, ignore);
-        }
+    async getNodeData(fetchObject) {
+        const {data} = await this._getFromAPI(fetchObject)
 
         return data;
     }
